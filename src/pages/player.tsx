@@ -674,10 +674,32 @@ const MatchResultEntry = ({ navigate }) => {
           </div>
         </div>
 
+        {submitted && (
+          <div style={{ marginTop: 20, padding: '18px 20px', background: 'color-mix(in srgb, var(--primary) 8%, transparent)', borderRadius: 12, border: '1px solid color-mix(in srgb, var(--primary) 25%, transparent)' }}>
+            <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 4 }}>🎉 Result submitted!</div>
+            <div className="muted" style={{ fontSize: 13, marginBottom: 14 }}>{m.p2.name} has been notified. Share your win with the world:</div>
+            <div className="row" style={{ gap: 8, flexWrap: 'wrap' }}>
+              {shareLinks.map(s => (
+                <a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer" className="btn btn-soft" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, textDecoration: 'none' }}>
+                  <Icon name={s.icon} size={14}/> {s.name}
+                </a>
+              ))}
+              <button
+                className="btn btn-soft"
+                onClick={() => { navigator.clipboard?.writeText(`${shareText} ${shareUrl}`); }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+              >
+                <Icon name="link" size={14}/> Copy link
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="row" style={{ marginTop: 22, gap: 8, justifyContent:'flex-end' }}>
-          <Btn variant="ghost" onClick={()=>navigate('p_dashboard')}>Cancel</Btn>
-          <Btn variant="soft">Save draft</Btn>
-          <Btn variant="primary" iconRight="send" onClick={()=>navigate('p_dashboard')}>Submit & notify Hanna</Btn>
+          <Btn variant="ghost" onClick={()=>navigate('p_dashboard')}>{submitted ? 'Done' : 'Cancel'}</Btn>
+          {!submitted && (
+            <Btn variant="primary" iconRight="send" onClick={()=>setSubmitted(true)}>Submit & notify {(m.p2.name||'').split(' ')[0]}</Btn>
+          )}
         </div>
       </Card>
     </div>
