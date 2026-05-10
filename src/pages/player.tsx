@@ -578,16 +578,18 @@ const TournamentDetailPlayer = ({ navigate, id }: any) => {
 
 const MatchResultEntry = ({ navigate }) => {
   const D = TL_DATA;
-  const sel = window.TL_SELECTED_MATCH;
+  const sel = typeof window !== 'undefined' ? window.TL_SELECTED_MATCH : null;
   const m = sel || { ...D.MATCHES[2], surface: 'Clay', court: 'Court 2' };
-  // parse score "6-4, 3-6, 7-5" → [[6,3,7],[4,6,5]]
-  const parsed = (m.score || '6-4, 3-6, 7-5').split(',').map(s => s.trim().split('-').map(Number));
-  const initS1 = parsed.map(p => p[0]);
-  const initS2 = parsed.map(p => p[1]);
-  // pad to 3
-  while (initS1.length < 3) { initS1.push(0); initS2.push(0); }
-  const [s1, setS1] = useState(initS1);
-  const [s2, setS2] = useState(initS2);
+  const isFemale = /a$/i.test((m.p1.name || '').split(' ')[0]);
+  const defaultSets = isFemale ? 2 : 3;
+  const maxSets = defaultSets + 1;
+  const [scores, setScores] = useState(
+    Array.from({ length: defaultSets }, () => [0, 0])
+  );
+  const updateScore = (idx, side, v) =>
+    setScores(scores.map((s, i) => (i === idx ? (side === 0 ? [v, s[1]] : [s[0], v]) : s)));
+  const removeSet = (idx) => setScores(scores.filter((_, i) => i !== idx));
+  const addSet = () => scores.length < maxSets && setScores([...scores, [0, 0]]);
   const surfaceKey = (m.surface || 'Clay').toLowerCase();
   const courtLabel = `${m.surface || 'Clay'} · ${m.court || 'Court 2'}`;
   return (
@@ -614,25 +616,30 @@ const MatchResultEntry = ({ navigate }) => {
           <div className="surface-tag">{courtLabel}</div>
           <div className="eyebrow">Set scores</div>
           <div style={{ display:'grid', gap: 10, marginTop: 12 }}>
-            {[1,2,3].map(set => (
-              <div key={set} style={{ display:'grid', gridTemplateColumns:'60px 1fr 96px', gap: 16, alignItems:'center' }}>
-                <div className="mono muted" style={{ fontSize: 11, textAlign:'right' }}>SET {set}</div>
-                <div className="row" style={{ gap: 12, alignItems:'center', justifyContent:'center' }}>
-                  <ScoreInput value={s1[set-1]} onChange={v => setS1(s1.map((x,i)=>i===set-1?v:x))}/>
-                  <span className="muted">—</span>
-                  <ScoreInput value={s2[set-1]} onChange={v => setS2(s2.map((x,i)=>i===set-1?v:x))}/>
+            {scores.map((pair, idx) => {
+              const isLast = idx === maxSets - 1;
+              return (
+                <div key={idx} style={{ display:'grid', gridTemplateColumns:'60px 1fr 96px', gap: 16, alignItems:'center' }}>
+                  <div className="mono muted" style={{ fontSize: 11, textAlign:'right' }}>SET {idx + 1}</div>
+                  <div className="row" style={{ gap: 12, alignItems:'center', justifyContent:'center' }}>
+                    <ScoreInput value={pair[0]} onChange={v => updateScore(idx, 0, v)}/>
+                    <span className="muted">—</span>
+                    <ScoreInput value={pair[1]} onChange={v => updateScore(idx, 1, v)}/>
+                  </div>
+                  <div className="row" style={{ justifyContent:'flex-end', alignItems:'center', gap: 6 }}>
+                    {isLast
+                      ? <Chip tone="warn">Super TB</Chip>
+                      : <button className="icon-btn" style={{ width: 28, height: 28 }} onClick={() => removeSet(idx)}><Icon name="trash" size={12}/></button>}
+                  </div>
                 </div>
-                <div className="row" style={{ justifyContent:'flex-end', alignItems:'center', gap: 6 }}>
-                  {set === 3
-                    ? <Chip tone="warn">Super TB</Chip>
-                    : <button className="icon-btn" style={{ width: 28, height: 28 }}><Icon name="trash" size={12}/></button>}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
-          <div className="row" style={{ justifyContent:'center', marginTop: 14 }}>
-            <Btn variant="ghost" size="sm" icon="plus">Add set</Btn>
-          </div>
+          {scores.length < maxSets && (
+            <div className="row" style={{ justifyContent:'center', marginTop: 14 }}>
+              <Btn variant="ghost" size="sm" icon="plus" onClick={addSet}>Add set</Btn>
+            </div>
+          )}
         </div>
 
         <div style={{ marginTop: 18, display:'grid', gap: 14 }}>
@@ -650,7 +657,6 @@ const MatchResultEntry = ({ navigate }) => {
               </select>
             </div>
           </Field>
-          <Field label="Court"><select className="select" defaultValue="2"><option>Court 1</option><option value="2">Court 2</option><option>Court 3</option></select></Field>
 
           <div style={{ background:'color-mix(in srgb, var(--good) 10%, transparent)', borderRadius: 12, padding: '16px 20px', fontSize: 16, fontWeight: 600, color: 'var(--good)', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'nowrap', whiteSpace: 'nowrap' }}>
             <span style={{ fontSize: 22 }}>🎾</span>
