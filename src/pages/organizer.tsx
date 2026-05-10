@@ -9,6 +9,7 @@ import {
 } from '@/components/courtzone/atoms';
 import { TL_DATA } from '@/lib/mock-data';
 import { LiveBadge, ViewerBadge, FeaturedLive } from './live';
+import { FacilityPicker } from '@/components/courtzone/FacilityPicker';
 
 // Organizer pages 12-19: Create league, League detail, Standings, Match mgmt,
 // Create tournament, Tournament detail, Bracket, Tournament match mgmt
@@ -16,6 +17,7 @@ import { LiveBadge, ViewerBadge, FeaturedLive } from './live';
 const CreateLeague = ({ navigate }) => {
   const [format, setFormat] = useState('round-robin');
   const [step, setStep] = useState(1);
+  const [facility, setFacility] = useState('');
   return (
     <div className="page page--narrow">
       <PageHeader
@@ -41,8 +43,8 @@ const CreateLeague = ({ navigate }) => {
             <input className="input" defaultValue="Warszawa Open Spring 2026"/>
           </Field>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap: 12 }}>
-            <Field label="Organization">
-              <select className="select" defaultValue="WTC"><option value="WTC">Warszawa Tennis Club</option><option>Trójmiasto Tennis</option></select>
+            <Field label="Facility" hint="Where matches will be played">
+              <FacilityPicker value={facility} onChange={setFacility}/>
             </Field>
             <Field label="City"><input className="input" defaultValue="Warszawa"/></Field>
           </div>
@@ -453,6 +455,7 @@ const ResultEntryModal = ({ m, onClose }) => (
 
 const CreateTournament = ({ navigate }) => {
   const [format, setFormat] = useState('single');
+  const [facility, setFacility] = useState('');
   return (
     <div className="page page--narrow">
       <PageHeader eyebrow="New competition" title="Create a tournament." sub="One-shot bracket, fixed dates. Use a league instead if you want a multi-week format."/>
@@ -460,7 +463,9 @@ const CreateTournament = ({ navigate }) => {
         <div style={{ display:'grid', gap: 16 }}>
           <div style={{ display:'grid', gridTemplateColumns:'2fr 1fr', gap: 12 }}>
             <Field label="Tournament name"><input className="input" defaultValue="Mazovia Spring Cup 2026"/></Field>
-            <Field label="Organization"><select className="select"><option>Warszawa Tennis Club</option></select></Field>
+            <Field label="Facility" hint="Where matches are played">
+              <FacilityPicker value={facility} onChange={setFacility}/>
+            </Field>
           </div>
           <div>
             <label style={{ fontSize: 12, fontWeight: 600, color:'var(--ink-2)' }}>Format</label>
