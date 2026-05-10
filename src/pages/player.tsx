@@ -652,9 +652,9 @@ const MatchResultEntry = ({ navigate }) => {
           </Field>
           <Field label="Court"><select className="select" defaultValue="2"><option>Court 1</option><option value="2">Court 2</option><option>Court 3</option></select></Field>
 
-          <div style={{ background:'color-mix(in srgb, var(--good) 8%, transparent)', borderRadius: 10, padding: '16px 18px', fontSize: 16, fontWeight: 600, color: 'var(--good)', display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'nowrap', whiteSpace: 'nowrap' }}>
-            <Icon name="check" size={20}/>
-            <span><b>Match summary:</b> 6-4, 3-6, 7-5 — Iga Górski wins</span>
+          <div style={{ background:'color-mix(in srgb, var(--good) 10%, transparent)', borderRadius: 12, padding: '16px 20px', fontSize: 16, fontWeight: 600, color: 'var(--good)', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'nowrap', whiteSpace: 'nowrap' }}>
+            <span style={{ fontSize: 22 }}>🎾</span>
+            <span>Nice match! <b>6-4, 3-6, 7-5</b> — 🏆 <b>Iga Górski</b> takes it! 🔥</span>
           </div>
         </div>
 
