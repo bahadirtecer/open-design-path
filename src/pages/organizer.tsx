@@ -189,8 +189,8 @@ const CreateLeague = ({ navigate }) => {
         <div className="row" style={{ marginTop: 28, gap: 8, justifyContent: 'space-between' }}>
           <Btn variant="ghost" onClick={()=>setStep(Math.max(1, step-1))} disabled={step===1}>← Back</Btn>
           {step === 4
-            ? <Btn variant="primary" iconRight="check" onClick={()=>navigate('o_league')}>Publish league</Btn>
-            : <Btn variant="primary" iconRight="arrow_right" onClick={()=>setStep(step+1)}>Next: {['','Format & rules','Schedule','Branding','Publish'][step+1]}</Btn>}
+            ? <Btn variant="primary" iconRight="check" disabled={disciplineMissing} onClick={()=>!disciplineMissing && navigate('o_league')}>Publish league</Btn>
+            : <Btn variant="primary" iconRight="arrow_right" disabled={step===1 && disciplineMissing} onClick={()=>setStep(step+1)}>Next: {['','Format & rules','Schedule','Branding','Publish'][step+1]}</Btn>}
         </div>
       </Card>
     </div>
