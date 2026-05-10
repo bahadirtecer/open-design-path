@@ -9,6 +9,8 @@ import {
 } from '@/components/courtzone/atoms';
 import { TL_DATA } from '@/lib/mock-data';
 import { LiveBadge, ViewerBadge, FeaturedLive } from './live';
+import { useTweaks } from '@/lib/use-tweaks';
+import createCompetitionImg from '@/assets/create-competition.jpg';
 
 // Dashboards 7-9: Player, Organizer, Super admin
 
