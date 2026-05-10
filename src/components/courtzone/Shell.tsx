@@ -12,8 +12,6 @@ const NAV: any[] = [
   { id: 'p_browse_t', label: 'Browse tournaments', icon: 'bracket', role: 'all', count: 8 },
   { section: 'Organize' },
   { id: 'o_dashboard', label: 'Organizer hub', icon: 'shield', role: 'all' },
-  { id: 'o_create_l', label: 'Create league', icon: 'plus', role: 'all' },
-  { id: 'o_create_t', label: 'Create tournament', icon: 'plus', role: 'all' },
   { id: 'o_match_l', label: 'Match management', icon: 'court', role: 'all' },
   { section: 'Admin', role: 'admin' },
   { id: 'a_dashboard', label: 'Platform overview', icon: 'chart', role: 'admin' },
