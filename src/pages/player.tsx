@@ -500,7 +500,7 @@ const TournamentDetailPlayer = ({ navigate, id }: any) => {
       </div>
 
       {tab === 'bracket' && (
-        <Card title="Bracket — your path highlighted">
+        <Card title={`Bracket · ${t.name} — your path highlighted`}>
           <Bracket data={D.BRACKET_8}/>
         </Card>
       )}
