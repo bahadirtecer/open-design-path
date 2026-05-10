@@ -50,6 +50,22 @@ const CreateLeague = ({ navigate }) => {
           <Field label="League name" hint="Visible on the registration poster">
             <input className="input" defaultValue="Warszawa Open Spring 2026"/>
           </Field>
+          <div>
+            <label style={{ fontSize: 12, fontWeight: 600, color:'var(--ink-2)' }}>Discipline <span style={{ color:'var(--danger, #c0392b)' }}>*</span></label>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(3, minmax(0, 1fr))', gap: 8, marginTop: 8 }}>
+              {DISCIPLINES.map(d => (
+                <button key={d.id} onClick={()=>setDiscipline(d.id)}
+                  style={{ padding: 14, borderRadius: 12, border:'1px solid', borderColor: discipline===d.id?'var(--primary)':'var(--line)',
+                           background: discipline===d.id?'var(--surface)':'transparent', textAlign:'left', minWidth: 0,
+                           boxShadow: discipline===d.id?'0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent)':'none' }}>
+                  <Icon name="users" size={18} style={{ color: discipline===d.id?'var(--primary)':'var(--ink-3)' }}/>
+                  <div style={{ fontWeight: 700, marginTop: 6, fontSize: 13 }}>{d.t}</div>
+                  <div className="muted" style={{ fontSize: 11.5, marginTop: 2 }}>{d.s}</div>
+                </button>
+              ))}
+            </div>
+            {disciplineMissing && <div className="muted" style={{ fontSize: 11.5, marginTop: 6 }}>Pick one — required before publishing.</div>}
+          </div>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap: 12 }}>
             <Field label="Facility" hint="Where matches will be played">
               <FacilityPicker value={facility} onChange={setFacility}/>
