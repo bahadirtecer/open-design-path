@@ -12,7 +12,7 @@ const PATH_TO_ID: Record<string, string> = {
   '/organizer/create-league': 'o_create_l', '/organizer/create-tournament': 'o_create_t',
   '/organizer/matches': 'o_match_l',
   '/profile': 'u_profile', '/notifications': 'u_notifications', '/messages': 'u_messages',
-  '/qr': 'u_qr', '/admin/users': 'a_users', '/admin/orgs': 'a_orgs', '/admin/reports': 'a_reports',
+  '/qr': 'u_qr', '/admin/users': 'a_users', '/admin/orgs': 'a_orgs', '/admin/facilities': 'a_facilities', '/admin/reports': 'a_reports',
 };
 
 const ID_TO_LABEL: Record<string, string> = {
