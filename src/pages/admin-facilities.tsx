@@ -191,6 +191,7 @@ export const AdminFacilities = () => {
       </Card>
 
       {modal && <FacilityModal onClose={() => setModal(false)} onCreated={(f) => setActiveId(f.id)}/>}
+      </div>
     </div>
   );
 };
