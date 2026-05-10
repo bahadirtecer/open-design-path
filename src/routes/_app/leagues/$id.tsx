@@ -6,5 +6,6 @@ import { useCzNavigate } from '@/lib/use-cz-navigate';
 export const Route = createFileRoute('/_app/leagues/$id')({ component: Page });
 function Page() {
   const navigate = useCzNavigate();
-  return <LeagueDetailPlayer navigate={navigate} />;
+  const { id } = Route.useParams();
+  return <LeagueDetailPlayer navigate={navigate} id={id} />;
 }
