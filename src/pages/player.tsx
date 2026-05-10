@@ -615,17 +615,12 @@ const MatchResultEntry = ({ navigate }) => {
           <div className="eyebrow">Set scores</div>
           <div style={{ display:'grid', gap: 10, marginTop: 12 }}>
             {[1,2,3].map(set => (
-              <div key={set} style={{ display:'grid', gridTemplateColumns:'60px 1fr 96px', gap: 16, alignItems:'center' }}>
+              <div key={set} style={{ display:'grid', gridTemplateColumns:'60px 1fr', gap: 16, alignItems:'center' }}>
                 <div className="mono muted" style={{ fontSize: 11, textAlign:'right' }}>SET {set}</div>
                 <div className="row" style={{ gap: 12, alignItems:'center', justifyContent:'center' }}>
                   <ScoreInput value={s1[set-1]} onChange={v => setS1(s1.map((x,i)=>i===set-1?v:x))}/>
                   <span className="muted">—</span>
                   <ScoreInput value={s2[set-1]} onChange={v => setS2(s2.map((x,i)=>i===set-1?v:x))}/>
-                </div>
-                <div className="row" style={{ justifyContent:'flex-end', alignItems:'center', gap: 6 }}>
-                  {set === 3
-                    ? <Chip tone="warn">Super TB</Chip>
-                    : <button className="icon-btn" style={{ width: 28, height: 28 }}><Icon name="trash" size={12}/></button>}
                 </div>
               </div>
             ))}
