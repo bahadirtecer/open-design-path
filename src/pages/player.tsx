@@ -782,28 +782,37 @@ const MyProfile = ({ navigate }) => {
                 <Btn variant="primary" icon="plus" onClick={()=>setPickerOpen(true)}>Invite partner</Btn>
               </div>
             )}
-            {!partner && pickerOpen && (
+            {!partner && pickerOpen && (() => {
+              const q = (partnerQuery || '').trim().toLowerCase();
+              const filtered = q ? candidates.filter((p:any) => p.name.toLowerCase().includes(q) || (p.city||'').toLowerCase().includes(q)) : [];
+              return (
               <div style={{ display:'grid', gap: 10 }}>
-                <input className="input" placeholder="Search players by name, email or phone…"/>
-                <div style={{ display:'grid', gap: 6, maxHeight: 260, overflow:'auto' }}>
-                  {candidates.map(p => (
-                    <div key={p.id} className="row between" style={{ padding: 10, borderRadius: 10, border:'1px solid var(--line)' }}>
-                      <div className="row" style={{ gap: 10 }}>
-                        <Avatar src={p.avatar} name={p.name} size={32}/>
-                        <div>
-                          <div style={{ fontWeight: 600, fontSize: 13 }}>{p.name}</div>
-                          <div className="muted" style={{ fontSize: 11 }}>{p.city} · Rating {p.rating}</div>
+                <input className="input" placeholder="Search players by name, email or phone…" value={partnerQuery} onChange={(e)=>setPartnerQuery(e.target.value)} autoFocus/>
+                {q ? (
+                  <div style={{ display:'grid', gap: 6, maxHeight: 260, overflow:'auto' }}>
+                    {filtered.length === 0 && <div className="muted" style={{ fontSize: 12, padding: 10 }}>No players match "{partnerQuery}".</div>}
+                    {filtered.map((p:any) => (
+                      <div key={p.id} className="row between" style={{ padding: 10, borderRadius: 10, border:'1px solid var(--line)' }}>
+                        <div className="row" style={{ gap: 10 }}>
+                          <Avatar src={p.avatar} name={p.name} size={32}/>
+                          <div>
+                            <div style={{ fontWeight: 600, fontSize: 13 }}>{p.name}</div>
+                            <div className="muted" style={{ fontSize: 11 }}>{p.city} · Rating {p.rating}</div>
+                          </div>
                         </div>
+                        <Btn size="sm" variant="primary" iconRight="send" onClick={()=>{ setPartner({ stage:'invited', player: p }); setPickerOpen(false); setPartnerQuery(''); }}>Send invite</Btn>
                       </div>
-                      <Btn size="sm" variant="primary" iconRight="send" onClick={()=>{ setPartner({ stage:'invited', player: p }); setPickerOpen(false); }}>Send invite</Btn>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="muted" style={{ fontSize: 12, padding: '8px 2px' }}>Start typing a name to search players.</div>
+                )}
                 <div className="row" style={{ justifyContent:'flex-end' }}>
-                  <Btn variant="ghost" onClick={()=>setPickerOpen(false)}>Cancel</Btn>
+                  <Btn variant="ghost" onClick={()=>{ setPickerOpen(false); setPartnerQuery(''); }}>Cancel</Btn>
                 </div>
               </div>
-            )}
+              );
+            })()}
             {partner && (
               <div className="row between" style={{ gap: 12 }}>
                 <div className="row" style={{ gap: 12 }}>
