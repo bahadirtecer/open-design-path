@@ -34,14 +34,14 @@ function AppLayout() {
   const [t] = useTweaks();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const activeId = PATH_TO_ID[pathname] || (pathname.startsWith('/leagues') ? 'p_browse_l' : pathname.startsWith('/tournaments') ? 'p_browse_t' : '');
-  const label = ID_TO_LABEL[activeId] || 'CourtZone';
+  const label = ID_TO_LABEL[activeId] || '';
   return (
     <div className="app">
       <Sidebar activeId={activeId} navigate={navigate} role={t.role} />
       <div className="main">
         <Topbar
           title={label}
-          sub={t.role === 'admin' ? 'Super admin · CourtZone HQ' : 'Player · Warszawa'}
+          sub={t.role === 'admin' ? 'Super admin' : 'Player · Warszawa'}
           navigate={navigate}
           right={
             <button className="btn btn-ghost btn-sm" onClick={() => navigate('public_landing')}>
