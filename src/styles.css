@@ -272,7 +272,7 @@ img { display: block; max-width: 100%; }
   padding: 14px 28px;
   display: flex; align-items: center; gap: 14px;
 }
-.topbar-title { font-size: 15px; font-weight: 600; }
+.topbar-title { font-size: 15px; font-weight: 600; min-width: 200px; text-align: left; }
 .topbar-title small { color: var(--ink-3); font-weight: 500; margin-left: 8px; }
 .topbar-search {
   flex: 1; max-width: 460px;
