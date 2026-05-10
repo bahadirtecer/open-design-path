@@ -43,8 +43,8 @@ const CreateLeague = ({ navigate }) => {
             <input className="input" defaultValue="Warszawa Open Spring 2026"/>
           </Field>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap: 12 }}>
-            <Field label="Organization">
-              <select className="select" defaultValue="WTC"><option value="WTC">Warszawa Tennis Club</option><option>Trójmiasto Tennis</option></select>
+            <Field label="Facility" hint="Where matches will be played">
+              <FacilityPicker value={facility} onChange={setFacility}/>
             </Field>
             <Field label="City"><input className="input" defaultValue="Warszawa"/></Field>
           </div>
