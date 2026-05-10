@@ -152,6 +152,16 @@ const QRScanner = ({ navigate }) => {
 
 const QRConfirm = ({ navigate }) => {
   const l = TL_DATA.LEAGUES[0];
+  // Mock: read discipline from URL (?d=singles|doubles|mixed) — default singles
+  const [discipline, setDiscipline] = React.useState(() => {
+    try { return new URLSearchParams(window.location.search).get('d') || 'singles'; } catch { return 'singles'; }
+  });
+  const partner = (() => {
+    try { return JSON.parse(localStorage.getItem('cz_partner') || 'null'); } catch { return null; }
+  })();
+  const needsPartner = discipline === 'doubles' || discipline === 'mixed';
+  const hasPartner = !!partner && partner.stage === 'confirmed';
+  const blocked = needsPartner && !hasPartner;
   return (
     <div className="page page--narrow">
       <div className="card" style={{ overflow:'hidden' }}>
@@ -179,17 +189,47 @@ const QRConfirm = ({ navigate }) => {
                 </div>
               </div>
             </div>
-            <Chip tone="primary">{l.format}</Chip>
+            <div className="row" style={{ gap: 6 }}>
+              <Chip tone="primary">{l.format}</Chip>
+              <Chip tone={discipline==='singles'?'':'accent'}>{discipline === 'singles' ? 'Singles' : discipline === 'doubles' ? 'Doubles' : 'Mixed doubles'}</Chip>
+            </div>
           </div>
 
           <div className="divider" style={{ margin: '20px 0' }}/>
 
           <div style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
-            <Stat label="Format" value={l.format}/>
+            <Stat label="Discipline" value={discipline === 'singles' ? 'Singles' : discipline === 'doubles' ? 'Doubles' : 'Mixed'}/>
             <Stat label="Surface" value={l.surface}/>
             <Stat label="Players" value={`${l.players}/40`}/>
             <Stat label="Entry fee" value="Free"/>
           </div>
+
+          {/* Mock discipline picker for prototype */}
+          <div className="row" style={{ gap: 6, marginBottom: 12, flexWrap:'wrap' }}>
+            <span className="muted" style={{ fontSize: 11 }}>Demo · simulate discipline:</span>
+            {['singles','doubles','mixed'].map(d => (
+              <button key={d} onClick={()=>setDiscipline(d)} className="chip" style={{ cursor:'pointer', borderColor: discipline===d?'var(--primary)':undefined, color: discipline===d?'var(--primary)':undefined }}>{d}</button>
+            ))}
+          </div>
+
+          {needsPartner && (
+            <div className="card" style={{ padding: 14, marginBottom: 16, borderStyle:'dashed', background: blocked ? 'color-mix(in srgb, var(--danger, #c0392b) 8%, transparent)' : 'var(--surface-2)' }}>
+              <div className="row between" style={{ gap: 12 }}>
+                <div className="row" style={{ gap: 10 }}>
+                  <Icon name="users" size={18} style={{ color: blocked ? 'var(--danger, #c0392b)' : 'var(--primary)' }}/>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: 13 }}>{discipline === 'mixed' ? 'Mixed doubles' : 'Doubles'} — partner required</div>
+                    {hasPartner ? (
+                      <div className="muted" style={{ fontSize: 12 }}>You will register together with <b>{partner.player.name}</b>.</div>
+                    ) : (
+                      <div className="muted" style={{ fontSize: 12 }}>You don't have an active partner. Set one in <u>My profile</u> before registering.</div>
+                    )}
+                  </div>
+                </div>
+                {!hasPartner && <Btn size="sm" variant="primary" icon="user" onClick={()=>navigate('u_profile')}>Set partner</Btn>}
+              </div>
+            </div>
+          )}
 
           <h3 className="h3" style={{ marginTop: 8 }}>Confirm your details</h3>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap: 12, marginTop: 12 }}>
@@ -210,7 +250,7 @@ const QRConfirm = ({ navigate }) => {
 
           <div className="row" style={{ marginTop: 24, gap: 8 }}>
             <Btn variant="ghost" onClick={()=>navigate('u_qr')}>Back</Btn>
-            <Btn variant="primary" block iconRight="check" onClick={()=>navigate('qr_success')}>Confirm registration</Btn>
+            <Btn variant="primary" block iconRight="check" disabled={blocked} onClick={()=>!blocked && navigate('qr_success')}>{blocked ? 'Partner required to register' : 'Confirm registration'}</Btn>
           </div>
         </div>
       </div>
