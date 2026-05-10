@@ -455,6 +455,7 @@ const ResultEntryModal = ({ m, onClose }) => (
 
 const CreateTournament = ({ navigate }) => {
   const [format, setFormat] = useState('single');
+  const [facility, setFacility] = useState('');
   return (
     <div className="page page--narrow">
       <PageHeader eyebrow="New competition" title="Create a tournament." sub="One-shot bracket, fixed dates. Use a league instead if you want a multi-week format."/>
