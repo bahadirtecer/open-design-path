@@ -106,7 +106,55 @@ const PlayerDashboard = ({ navigate }) => {
   );
 };
 
-const OrganizerEmpty = ({ navigate }) => (
+const CompetitionPicker = ({ open, onClose, navigate }) => {
+  if (!open) return null;
+  const choose = (id) => { onClose(); navigate(id); };
+  return (
+    <div
+      onClick={onClose}
+      style={{ position:'fixed', inset: 0, background:'color-mix(in srgb, #000 55%, transparent)', backdropFilter:'blur(4px)', zIndex: 60, display:'grid', placeItems:'center', padding: 24 }}
+    >
+      <div onClick={(e)=>e.stopPropagation()} className="card" style={{ width:'min(720px, 100%)', padding: 28 }}>
+        <div className="row between" style={{ marginBottom: 20 }}>
+          <div>
+            <div className="mono muted" style={{ fontSize: 10, letterSpacing:'0.12em', textTransform:'uppercase' }}>New competition</div>
+            <div style={{ fontFamily:'var(--font-display)', fontSize: 24, fontStyle:'italic', marginTop: 4 }}>What are you organizing?</div>
+          </div>
+          <button onClick={onClose} style={{ width: 28, height: 28, borderRadius: 8, color:'var(--ink-3)' }}>×</button>
+        </div>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap: 14 }}>
+          {[
+            { id:'o_create_l', icon:'flag', title:'League', sub:'Recurring season with standings — round-robin, ladder or ATP-points.', cta:'Create league' },
+            { id:'o_create_t', icon:'bracket', title:'Tournament', sub:'Knockout event over a weekend — single, double elim or group + KO.', cta:'Create tournament' },
+          ].map((o) => (
+            <button
+              key={o.id}
+              onClick={()=>choose(o.id)}
+              style={{
+                textAlign:'left', padding: 20, borderRadius: 14,
+                border:'1px solid var(--line)', background:'var(--surface)',
+                display:'flex', flexDirection:'column', gap: 12, cursor:'pointer',
+              }}
+              onMouseEnter={(e)=>{ e.currentTarget.style.borderColor='var(--primary)'; e.currentTarget.style.boxShadow='var(--shadow-md)'; }}
+              onMouseLeave={(e)=>{ e.currentTarget.style.borderColor='var(--line)'; e.currentTarget.style.boxShadow='none'; }}
+            >
+              <div style={{ width: 44, height: 44, borderRadius: 12, background:'var(--bg-2)', display:'grid', placeItems:'center' }}>
+                <Icon name={o.icon} size={20}/>
+              </div>
+              <div style={{ fontWeight: 700, fontSize: 16 }}>{o.title}</div>
+              <div className="muted" style={{ fontSize: 12.5, lineHeight: 1.5 }}>{o.sub}</div>
+              <div className="row" style={{ gap: 6, fontSize: 12, fontWeight: 600, color:'var(--primary)', marginTop: 4 }}>
+                {o.cta} <Icon name="arrow_right" size={12}/>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const OrganizerEmpty = ({ onNew }) => (
   <div className="page">
     <PageHeader
       eyebrow="Organizer hub"
@@ -134,8 +182,7 @@ const OrganizerEmpty = ({ navigate }) => (
             <li className="row" style={{ gap: 10 }}><Icon name="qr" size={14}/> One QR code to onboard every player</li>
           </ul>
           <div className="row" style={{ gap: 10, marginTop: 4 }}>
-            <Btn variant="primary" icon="plus" onClick={()=>navigate('o_create_l')}>New league</Btn>
-            <Btn variant="soft" icon="plus" onClick={()=>navigate('o_create_t')}>New tournament</Btn>
+            <Btn variant="primary" icon="plus" onClick={onNew}>New competition</Btn>
           </div>
         </div>
         <div style={{ background:'var(--bg-2)', display:'grid', placeItems:'center', padding: 24 }}>
@@ -156,7 +203,12 @@ const OrganizerEmpty = ({ navigate }) => (
 const OrganizerDashboard = ({ navigate }) => {
   const D = TL_DATA;
   const [t] = useTweaks();
-  if (t.organizing === 'none') return <OrganizerEmpty navigate={navigate} />;
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const openPicker = () => setPickerOpen(true);
+  if (t.organizing === 'none') return (<>
+    <OrganizerEmpty onNew={openPicker} />
+    <CompetitionPicker open={pickerOpen} onClose={()=>setPickerOpen(false)} navigate={navigate}/>
+  </>);
   return (
     <div className="page page--wide">
       <PageHeader
@@ -165,9 +217,10 @@ const OrganizerDashboard = ({ navigate }) => {
         sub="Two matches need your dispute resolution. Mazovia Spring Cup opens registration in 3 days."
         action={<>
           <Btn variant="ghost" icon="download" onClick={()=>navigate('o_league')}>Export season</Btn>
-          <Btn variant="primary" icon="plus" onClick={()=>navigate('o_create_l')}>New competition</Btn>
+          <Btn variant="primary" icon="plus" onClick={openPicker}>New competition</Btn>
         </>}
       />
+      <CompetitionPicker open={pickerOpen} onClose={()=>setPickerOpen(false)} navigate={navigate}/>
 
       <div style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap: 12, marginBottom: 24 }}>
         <Stat label="Total participants" value="650" delta="+18 this week"/>
