@@ -9,38 +9,532 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as ResetRouteImport } from './routes/reset'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as HowRouteImport } from './routes/how'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppProfileRouteImport } from './routes/_app/profile'
+import { Route as AppNotificationsRouteImport } from './routes/_app/notifications'
+import { Route as AppMyRouteImport } from './routes/_app/my'
+import { Route as AppMessagesRouteImport } from './routes/_app/messages'
+import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
+import { Route as AppTournamentsIndexRouteImport } from './routes/_app/tournaments/index'
+import { Route as AppQrIndexRouteImport } from './routes/_app/qr/index'
+import { Route as AppOrganizerIndexRouteImport } from './routes/_app/organizer/index'
+import { Route as AppMatchesIndexRouteImport } from './routes/_app/matches/index'
+import { Route as AppLiveIndexRouteImport } from './routes/_app/live/index'
+import { Route as AppLeaguesIndexRouteImport } from './routes/_app/leagues/index'
+import { Route as AppAdminIndexRouteImport } from './routes/_app/admin/index'
+import { Route as AppUHandleRouteImport } from './routes/_app/u/$handle'
+import { Route as AppQrSuccessRouteImport } from './routes/_app/qr/success'
+import { Route as AppQrPosterRouteImport } from './routes/_app/qr/poster'
+import { Route as AppQrConfirmRouteImport } from './routes/_app/qr/confirm'
+import { Route as AppOrganizerMatchesRouteImport } from './routes/_app/organizer/matches'
+import { Route as AppOrganizerCreateTournamentRouteImport } from './routes/_app/organizer/create-tournament'
+import { Route as AppOrganizerCreateLeagueRouteImport } from './routes/_app/organizer/create-league'
+import { Route as AppMatchesEntryRouteImport } from './routes/_app/matches/entry'
+import { Route as AppLiveGoRouteImport } from './routes/_app/live/go'
+import { Route as AppLiveDashboardRouteImport } from './routes/_app/live/dashboard'
+import { Route as AppLeaguesIdRouteImport } from './routes/_app/leagues/$id'
+import { Route as AppAdminUsersRouteImport } from './routes/_app/admin/users'
+import { Route as AppAdminReportsRouteImport } from './routes/_app/admin/reports'
+import { Route as AppAdminOrgsRouteImport } from './routes/_app/admin/orgs'
+import { Route as AppTournamentsIdIndexRouteImport } from './routes/_app/tournaments/$id.index'
+import { Route as AppTournamentsIdBracketRouteImport } from './routes/_app/tournaments/$id.bracket'
+import { Route as AppOrganizerTournamentsIdRouteImport } from './routes/_app/organizer/tournaments/$id'
+import { Route as AppOrganizerLeaguesIdRouteImport } from './routes/_app/organizer/leagues/$id'
+import { Route as AppLiveWatchIdRouteImport } from './routes/_app/live/watch.$id'
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetRoute = ResetRouteImport.update({
+  id: '/reset',
+  path: '/reset',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowRoute = HowRouteImport.update({
+  id: '/how',
+  path: '/how',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppProfileRoute = AppProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppNotificationsRoute = AppNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMyRoute = AppMyRouteImport.update({
+  id: '/my',
+  path: '/my',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMessagesRoute = AppMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTournamentsIndexRoute = AppTournamentsIndexRouteImport.update({
+  id: '/tournaments/',
+  path: '/tournaments/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppQrIndexRoute = AppQrIndexRouteImport.update({
+  id: '/qr/',
+  path: '/qr/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppOrganizerIndexRoute = AppOrganizerIndexRouteImport.update({
+  id: '/organizer/',
+  path: '/organizer/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMatchesIndexRoute = AppMatchesIndexRouteImport.update({
+  id: '/matches/',
+  path: '/matches/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLiveIndexRoute = AppLiveIndexRouteImport.update({
+  id: '/live/',
+  path: '/live/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLeaguesIndexRoute = AppLeaguesIndexRouteImport.update({
+  id: '/leagues/',
+  path: '/leagues/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminIndexRoute = AppAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppUHandleRoute = AppUHandleRouteImport.update({
+  id: '/u/$handle',
+  path: '/u/$handle',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppQrSuccessRoute = AppQrSuccessRouteImport.update({
+  id: '/qr/success',
+  path: '/qr/success',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppQrPosterRoute = AppQrPosterRouteImport.update({
+  id: '/qr/poster',
+  path: '/qr/poster',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppQrConfirmRoute = AppQrConfirmRouteImport.update({
+  id: '/qr/confirm',
+  path: '/qr/confirm',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppOrganizerMatchesRoute = AppOrganizerMatchesRouteImport.update({
+  id: '/organizer/matches',
+  path: '/organizer/matches',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppOrganizerCreateTournamentRoute =
+  AppOrganizerCreateTournamentRouteImport.update({
+    id: '/organizer/create-tournament',
+    path: '/organizer/create-tournament',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppOrganizerCreateLeagueRoute =
+  AppOrganizerCreateLeagueRouteImport.update({
+    id: '/organizer/create-league',
+    path: '/organizer/create-league',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppMatchesEntryRoute = AppMatchesEntryRouteImport.update({
+  id: '/matches/entry',
+  path: '/matches/entry',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLiveGoRoute = AppLiveGoRouteImport.update({
+  id: '/live/go',
+  path: '/live/go',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLiveDashboardRoute = AppLiveDashboardRouteImport.update({
+  id: '/live/dashboard',
+  path: '/live/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLeaguesIdRoute = AppLeaguesIdRouteImport.update({
+  id: '/leagues/$id',
+  path: '/leagues/$id',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminUsersRoute = AppAdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminReportsRoute = AppAdminReportsRouteImport.update({
+  id: '/admin/reports',
+  path: '/admin/reports',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminOrgsRoute = AppAdminOrgsRouteImport.update({
+  id: '/admin/orgs',
+  path: '/admin/orgs',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTournamentsIdIndexRoute = AppTournamentsIdIndexRouteImport.update({
+  id: '/tournaments/$id/',
+  path: '/tournaments/$id/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTournamentsIdBracketRoute = AppTournamentsIdBracketRouteImport.update({
+  id: '/tournaments/$id/bracket',
+  path: '/tournaments/$id/bracket',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppOrganizerTournamentsIdRoute =
+  AppOrganizerTournamentsIdRouteImport.update({
+    id: '/organizer/tournaments/$id',
+    path: '/organizer/tournaments/$id',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppOrganizerLeaguesIdRoute = AppOrganizerLeaguesIdRouteImport.update({
+  id: '/organizer/leagues/$id',
+  path: '/organizer/leagues/$id',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLiveWatchIdRoute = AppLiveWatchIdRouteImport.update({
+  id: '/live/watch/$id',
+  path: '/live/watch/$id',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/how': typeof HowRoute
+  '/login': typeof LoginRoute
+  '/reset': typeof ResetRoute
+  '/signup': typeof SignupRoute
+  '/dashboard': typeof AppDashboardRoute
+  '/messages': typeof AppMessagesRoute
+  '/my': typeof AppMyRoute
+  '/notifications': typeof AppNotificationsRoute
+  '/profile': typeof AppProfileRoute
+  '/admin/orgs': typeof AppAdminOrgsRoute
+  '/admin/reports': typeof AppAdminReportsRoute
+  '/admin/users': typeof AppAdminUsersRoute
+  '/leagues/$id': typeof AppLeaguesIdRoute
+  '/live/dashboard': typeof AppLiveDashboardRoute
+  '/live/go': typeof AppLiveGoRoute
+  '/matches/entry': typeof AppMatchesEntryRoute
+  '/organizer/create-league': typeof AppOrganizerCreateLeagueRoute
+  '/organizer/create-tournament': typeof AppOrganizerCreateTournamentRoute
+  '/organizer/matches': typeof AppOrganizerMatchesRoute
+  '/qr/confirm': typeof AppQrConfirmRoute
+  '/qr/poster': typeof AppQrPosterRoute
+  '/qr/success': typeof AppQrSuccessRoute
+  '/u/$handle': typeof AppUHandleRoute
+  '/admin/': typeof AppAdminIndexRoute
+  '/leagues/': typeof AppLeaguesIndexRoute
+  '/live/': typeof AppLiveIndexRoute
+  '/matches/': typeof AppMatchesIndexRoute
+  '/organizer/': typeof AppOrganizerIndexRoute
+  '/qr/': typeof AppQrIndexRoute
+  '/tournaments/': typeof AppTournamentsIndexRoute
+  '/live/watch/$id': typeof AppLiveWatchIdRoute
+  '/organizer/leagues/$id': typeof AppOrganizerLeaguesIdRoute
+  '/organizer/tournaments/$id': typeof AppOrganizerTournamentsIdRoute
+  '/tournaments/$id/bracket': typeof AppTournamentsIdBracketRoute
+  '/tournaments/$id/': typeof AppTournamentsIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/how': typeof HowRoute
+  '/login': typeof LoginRoute
+  '/reset': typeof ResetRoute
+  '/signup': typeof SignupRoute
+  '/dashboard': typeof AppDashboardRoute
+  '/messages': typeof AppMessagesRoute
+  '/my': typeof AppMyRoute
+  '/notifications': typeof AppNotificationsRoute
+  '/profile': typeof AppProfileRoute
+  '/admin/orgs': typeof AppAdminOrgsRoute
+  '/admin/reports': typeof AppAdminReportsRoute
+  '/admin/users': typeof AppAdminUsersRoute
+  '/leagues/$id': typeof AppLeaguesIdRoute
+  '/live/dashboard': typeof AppLiveDashboardRoute
+  '/live/go': typeof AppLiveGoRoute
+  '/matches/entry': typeof AppMatchesEntryRoute
+  '/organizer/create-league': typeof AppOrganizerCreateLeagueRoute
+  '/organizer/create-tournament': typeof AppOrganizerCreateTournamentRoute
+  '/organizer/matches': typeof AppOrganizerMatchesRoute
+  '/qr/confirm': typeof AppQrConfirmRoute
+  '/qr/poster': typeof AppQrPosterRoute
+  '/qr/success': typeof AppQrSuccessRoute
+  '/u/$handle': typeof AppUHandleRoute
+  '/admin': typeof AppAdminIndexRoute
+  '/leagues': typeof AppLeaguesIndexRoute
+  '/live': typeof AppLiveIndexRoute
+  '/matches': typeof AppMatchesIndexRoute
+  '/organizer': typeof AppOrganizerIndexRoute
+  '/qr': typeof AppQrIndexRoute
+  '/tournaments': typeof AppTournamentsIndexRoute
+  '/live/watch/$id': typeof AppLiveWatchIdRoute
+  '/organizer/leagues/$id': typeof AppOrganizerLeaguesIdRoute
+  '/organizer/tournaments/$id': typeof AppOrganizerTournamentsIdRoute
+  '/tournaments/$id/bracket': typeof AppTournamentsIdBracketRoute
+  '/tournaments/$id': typeof AppTournamentsIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
+  '/about': typeof AboutRoute
+  '/how': typeof HowRoute
+  '/login': typeof LoginRoute
+  '/reset': typeof ResetRoute
+  '/signup': typeof SignupRoute
+  '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/messages': typeof AppMessagesRoute
+  '/_app/my': typeof AppMyRoute
+  '/_app/notifications': typeof AppNotificationsRoute
+  '/_app/profile': typeof AppProfileRoute
+  '/_app/admin/orgs': typeof AppAdminOrgsRoute
+  '/_app/admin/reports': typeof AppAdminReportsRoute
+  '/_app/admin/users': typeof AppAdminUsersRoute
+  '/_app/leagues/$id': typeof AppLeaguesIdRoute
+  '/_app/live/dashboard': typeof AppLiveDashboardRoute
+  '/_app/live/go': typeof AppLiveGoRoute
+  '/_app/matches/entry': typeof AppMatchesEntryRoute
+  '/_app/organizer/create-league': typeof AppOrganizerCreateLeagueRoute
+  '/_app/organizer/create-tournament': typeof AppOrganizerCreateTournamentRoute
+  '/_app/organizer/matches': typeof AppOrganizerMatchesRoute
+  '/_app/qr/confirm': typeof AppQrConfirmRoute
+  '/_app/qr/poster': typeof AppQrPosterRoute
+  '/_app/qr/success': typeof AppQrSuccessRoute
+  '/_app/u/$handle': typeof AppUHandleRoute
+  '/_app/admin/': typeof AppAdminIndexRoute
+  '/_app/leagues/': typeof AppLeaguesIndexRoute
+  '/_app/live/': typeof AppLiveIndexRoute
+  '/_app/matches/': typeof AppMatchesIndexRoute
+  '/_app/organizer/': typeof AppOrganizerIndexRoute
+  '/_app/qr/': typeof AppQrIndexRoute
+  '/_app/tournaments/': typeof AppTournamentsIndexRoute
+  '/_app/live/watch/$id': typeof AppLiveWatchIdRoute
+  '/_app/organizer/leagues/$id': typeof AppOrganizerLeaguesIdRoute
+  '/_app/organizer/tournaments/$id': typeof AppOrganizerTournamentsIdRoute
+  '/_app/tournaments/$id/bracket': typeof AppTournamentsIdBracketRoute
+  '/_app/tournaments/$id/': typeof AppTournamentsIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/how'
+    | '/login'
+    | '/reset'
+    | '/signup'
+    | '/dashboard'
+    | '/messages'
+    | '/my'
+    | '/notifications'
+    | '/profile'
+    | '/admin/orgs'
+    | '/admin/reports'
+    | '/admin/users'
+    | '/leagues/$id'
+    | '/live/dashboard'
+    | '/live/go'
+    | '/matches/entry'
+    | '/organizer/create-league'
+    | '/organizer/create-tournament'
+    | '/organizer/matches'
+    | '/qr/confirm'
+    | '/qr/poster'
+    | '/qr/success'
+    | '/u/$handle'
+    | '/admin/'
+    | '/leagues/'
+    | '/live/'
+    | '/matches/'
+    | '/organizer/'
+    | '/qr/'
+    | '/tournaments/'
+    | '/live/watch/$id'
+    | '/organizer/leagues/$id'
+    | '/organizer/tournaments/$id'
+    | '/tournaments/$id/bracket'
+    | '/tournaments/$id/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/how'
+    | '/login'
+    | '/reset'
+    | '/signup'
+    | '/dashboard'
+    | '/messages'
+    | '/my'
+    | '/notifications'
+    | '/profile'
+    | '/admin/orgs'
+    | '/admin/reports'
+    | '/admin/users'
+    | '/leagues/$id'
+    | '/live/dashboard'
+    | '/live/go'
+    | '/matches/entry'
+    | '/organizer/create-league'
+    | '/organizer/create-tournament'
+    | '/organizer/matches'
+    | '/qr/confirm'
+    | '/qr/poster'
+    | '/qr/success'
+    | '/u/$handle'
+    | '/admin'
+    | '/leagues'
+    | '/live'
+    | '/matches'
+    | '/organizer'
+    | '/qr'
+    | '/tournaments'
+    | '/live/watch/$id'
+    | '/organizer/leagues/$id'
+    | '/organizer/tournaments/$id'
+    | '/tournaments/$id/bracket'
+    | '/tournaments/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/_app'
+    | '/about'
+    | '/how'
+    | '/login'
+    | '/reset'
+    | '/signup'
+    | '/_app/dashboard'
+    | '/_app/messages'
+    | '/_app/my'
+    | '/_app/notifications'
+    | '/_app/profile'
+    | '/_app/admin/orgs'
+    | '/_app/admin/reports'
+    | '/_app/admin/users'
+    | '/_app/leagues/$id'
+    | '/_app/live/dashboard'
+    | '/_app/live/go'
+    | '/_app/matches/entry'
+    | '/_app/organizer/create-league'
+    | '/_app/organizer/create-tournament'
+    | '/_app/organizer/matches'
+    | '/_app/qr/confirm'
+    | '/_app/qr/poster'
+    | '/_app/qr/success'
+    | '/_app/u/$handle'
+    | '/_app/admin/'
+    | '/_app/leagues/'
+    | '/_app/live/'
+    | '/_app/matches/'
+    | '/_app/organizer/'
+    | '/_app/qr/'
+    | '/_app/tournaments/'
+    | '/_app/live/watch/$id'
+    | '/_app/organizer/leagues/$id'
+    | '/_app/organizer/tournaments/$id'
+    | '/_app/tournaments/$id/bracket'
+    | '/_app/tournaments/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  AboutRoute: typeof AboutRoute
+  HowRoute: typeof HowRoute
+  LoginRoute: typeof LoginRoute
+  ResetRoute: typeof ResetRoute
+  SignupRoute: typeof SignupRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset': {
+      id: '/reset'
+      path: '/reset'
+      fullPath: '/reset'
+      preLoaderRoute: typeof ResetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how': {
+      id: '/how'
+      path: '/how'
+      fullPath: '/how'
+      preLoaderRoute: typeof HowRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,12 +542,315 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/profile': {
+      id: '/_app/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AppProfileRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/notifications': {
+      id: '/_app/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AppNotificationsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/my': {
+      id: '/_app/my'
+      path: '/my'
+      fullPath: '/my'
+      preLoaderRoute: typeof AppMyRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/messages': {
+      id: '/_app/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof AppMessagesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/dashboard': {
+      id: '/_app/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/tournaments/': {
+      id: '/_app/tournaments/'
+      path: '/tournaments'
+      fullPath: '/tournaments/'
+      preLoaderRoute: typeof AppTournamentsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/qr/': {
+      id: '/_app/qr/'
+      path: '/qr'
+      fullPath: '/qr/'
+      preLoaderRoute: typeof AppQrIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/organizer/': {
+      id: '/_app/organizer/'
+      path: '/organizer'
+      fullPath: '/organizer/'
+      preLoaderRoute: typeof AppOrganizerIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/matches/': {
+      id: '/_app/matches/'
+      path: '/matches'
+      fullPath: '/matches/'
+      preLoaderRoute: typeof AppMatchesIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/live/': {
+      id: '/_app/live/'
+      path: '/live'
+      fullPath: '/live/'
+      preLoaderRoute: typeof AppLiveIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/leagues/': {
+      id: '/_app/leagues/'
+      path: '/leagues'
+      fullPath: '/leagues/'
+      preLoaderRoute: typeof AppLeaguesIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin/': {
+      id: '/_app/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AppAdminIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/u/$handle': {
+      id: '/_app/u/$handle'
+      path: '/u/$handle'
+      fullPath: '/u/$handle'
+      preLoaderRoute: typeof AppUHandleRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/qr/success': {
+      id: '/_app/qr/success'
+      path: '/qr/success'
+      fullPath: '/qr/success'
+      preLoaderRoute: typeof AppQrSuccessRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/qr/poster': {
+      id: '/_app/qr/poster'
+      path: '/qr/poster'
+      fullPath: '/qr/poster'
+      preLoaderRoute: typeof AppQrPosterRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/qr/confirm': {
+      id: '/_app/qr/confirm'
+      path: '/qr/confirm'
+      fullPath: '/qr/confirm'
+      preLoaderRoute: typeof AppQrConfirmRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/organizer/matches': {
+      id: '/_app/organizer/matches'
+      path: '/organizer/matches'
+      fullPath: '/organizer/matches'
+      preLoaderRoute: typeof AppOrganizerMatchesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/organizer/create-tournament': {
+      id: '/_app/organizer/create-tournament'
+      path: '/organizer/create-tournament'
+      fullPath: '/organizer/create-tournament'
+      preLoaderRoute: typeof AppOrganizerCreateTournamentRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/organizer/create-league': {
+      id: '/_app/organizer/create-league'
+      path: '/organizer/create-league'
+      fullPath: '/organizer/create-league'
+      preLoaderRoute: typeof AppOrganizerCreateLeagueRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/matches/entry': {
+      id: '/_app/matches/entry'
+      path: '/matches/entry'
+      fullPath: '/matches/entry'
+      preLoaderRoute: typeof AppMatchesEntryRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/live/go': {
+      id: '/_app/live/go'
+      path: '/live/go'
+      fullPath: '/live/go'
+      preLoaderRoute: typeof AppLiveGoRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/live/dashboard': {
+      id: '/_app/live/dashboard'
+      path: '/live/dashboard'
+      fullPath: '/live/dashboard'
+      preLoaderRoute: typeof AppLiveDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/leagues/$id': {
+      id: '/_app/leagues/$id'
+      path: '/leagues/$id'
+      fullPath: '/leagues/$id'
+      preLoaderRoute: typeof AppLeaguesIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin/users': {
+      id: '/_app/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AppAdminUsersRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin/reports': {
+      id: '/_app/admin/reports'
+      path: '/admin/reports'
+      fullPath: '/admin/reports'
+      preLoaderRoute: typeof AppAdminReportsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin/orgs': {
+      id: '/_app/admin/orgs'
+      path: '/admin/orgs'
+      fullPath: '/admin/orgs'
+      preLoaderRoute: typeof AppAdminOrgsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/tournaments/$id/': {
+      id: '/_app/tournaments/$id/'
+      path: '/tournaments/$id'
+      fullPath: '/tournaments/$id/'
+      preLoaderRoute: typeof AppTournamentsIdIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/tournaments/$id/bracket': {
+      id: '/_app/tournaments/$id/bracket'
+      path: '/tournaments/$id/bracket'
+      fullPath: '/tournaments/$id/bracket'
+      preLoaderRoute: typeof AppTournamentsIdBracketRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/organizer/tournaments/$id': {
+      id: '/_app/organizer/tournaments/$id'
+      path: '/organizer/tournaments/$id'
+      fullPath: '/organizer/tournaments/$id'
+      preLoaderRoute: typeof AppOrganizerTournamentsIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/organizer/leagues/$id': {
+      id: '/_app/organizer/leagues/$id'
+      path: '/organizer/leagues/$id'
+      fullPath: '/organizer/leagues/$id'
+      preLoaderRoute: typeof AppOrganizerLeaguesIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/live/watch/$id': {
+      id: '/_app/live/watch/$id'
+      path: '/live/watch/$id'
+      fullPath: '/live/watch/$id'
+      preLoaderRoute: typeof AppLiveWatchIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppDashboardRoute: typeof AppDashboardRoute
+  AppMessagesRoute: typeof AppMessagesRoute
+  AppMyRoute: typeof AppMyRoute
+  AppNotificationsRoute: typeof AppNotificationsRoute
+  AppProfileRoute: typeof AppProfileRoute
+  AppAdminOrgsRoute: typeof AppAdminOrgsRoute
+  AppAdminReportsRoute: typeof AppAdminReportsRoute
+  AppAdminUsersRoute: typeof AppAdminUsersRoute
+  AppLeaguesIdRoute: typeof AppLeaguesIdRoute
+  AppLiveDashboardRoute: typeof AppLiveDashboardRoute
+  AppLiveGoRoute: typeof AppLiveGoRoute
+  AppMatchesEntryRoute: typeof AppMatchesEntryRoute
+  AppOrganizerCreateLeagueRoute: typeof AppOrganizerCreateLeagueRoute
+  AppOrganizerCreateTournamentRoute: typeof AppOrganizerCreateTournamentRoute
+  AppOrganizerMatchesRoute: typeof AppOrganizerMatchesRoute
+  AppQrConfirmRoute: typeof AppQrConfirmRoute
+  AppQrPosterRoute: typeof AppQrPosterRoute
+  AppQrSuccessRoute: typeof AppQrSuccessRoute
+  AppUHandleRoute: typeof AppUHandleRoute
+  AppAdminIndexRoute: typeof AppAdminIndexRoute
+  AppLeaguesIndexRoute: typeof AppLeaguesIndexRoute
+  AppLiveIndexRoute: typeof AppLiveIndexRoute
+  AppMatchesIndexRoute: typeof AppMatchesIndexRoute
+  AppOrganizerIndexRoute: typeof AppOrganizerIndexRoute
+  AppQrIndexRoute: typeof AppQrIndexRoute
+  AppTournamentsIndexRoute: typeof AppTournamentsIndexRoute
+  AppLiveWatchIdRoute: typeof AppLiveWatchIdRoute
+  AppOrganizerLeaguesIdRoute: typeof AppOrganizerLeaguesIdRoute
+  AppOrganizerTournamentsIdRoute: typeof AppOrganizerTournamentsIdRoute
+  AppTournamentsIdBracketRoute: typeof AppTournamentsIdBracketRoute
+  AppTournamentsIdIndexRoute: typeof AppTournamentsIdIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppDashboardRoute: AppDashboardRoute,
+  AppMessagesRoute: AppMessagesRoute,
+  AppMyRoute: AppMyRoute,
+  AppNotificationsRoute: AppNotificationsRoute,
+  AppProfileRoute: AppProfileRoute,
+  AppAdminOrgsRoute: AppAdminOrgsRoute,
+  AppAdminReportsRoute: AppAdminReportsRoute,
+  AppAdminUsersRoute: AppAdminUsersRoute,
+  AppLeaguesIdRoute: AppLeaguesIdRoute,
+  AppLiveDashboardRoute: AppLiveDashboardRoute,
+  AppLiveGoRoute: AppLiveGoRoute,
+  AppMatchesEntryRoute: AppMatchesEntryRoute,
+  AppOrganizerCreateLeagueRoute: AppOrganizerCreateLeagueRoute,
+  AppOrganizerCreateTournamentRoute: AppOrganizerCreateTournamentRoute,
+  AppOrganizerMatchesRoute: AppOrganizerMatchesRoute,
+  AppQrConfirmRoute: AppQrConfirmRoute,
+  AppQrPosterRoute: AppQrPosterRoute,
+  AppQrSuccessRoute: AppQrSuccessRoute,
+  AppUHandleRoute: AppUHandleRoute,
+  AppAdminIndexRoute: AppAdminIndexRoute,
+  AppLeaguesIndexRoute: AppLeaguesIndexRoute,
+  AppLiveIndexRoute: AppLiveIndexRoute,
+  AppMatchesIndexRoute: AppMatchesIndexRoute,
+  AppOrganizerIndexRoute: AppOrganizerIndexRoute,
+  AppQrIndexRoute: AppQrIndexRoute,
+  AppTournamentsIndexRoute: AppTournamentsIndexRoute,
+  AppLiveWatchIdRoute: AppLiveWatchIdRoute,
+  AppOrganizerLeaguesIdRoute: AppOrganizerLeaguesIdRoute,
+  AppOrganizerTournamentsIdRoute: AppOrganizerTournamentsIdRoute,
+  AppTournamentsIdBracketRoute: AppTournamentsIdBracketRoute,
+  AppTournamentsIdIndexRoute: AppTournamentsIdIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  AboutRoute: AboutRoute,
+  HowRoute: HowRoute,
+  LoginRoute: LoginRoute,
+  ResetRoute: ResetRoute,
+  SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
