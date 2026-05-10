@@ -7,8 +7,9 @@ const SECTIONS = [
     key: 'theme',
     label: 'Theme',
     options: [
-      { v: 'vercel', l: 'Vercel' },
       { v: '', l: 'Court' },
+      { v: 'vercel', l: 'Vercel' },
+      { v: 'dark', l: 'Dark' },
     ],
   },
   {
