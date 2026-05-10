@@ -1098,7 +1098,7 @@ body[data-theme="vercel"] .public-shell > nav { background-color: color-mix(in s
 .set-scores-court {
   position: relative;
   border-radius: 14px;
-  padding: 22px 20px 20px;
+  padding: 56px 20px 56px;
   overflow: hidden;
   isolation: isolate;
   border: 1px solid var(--line);
