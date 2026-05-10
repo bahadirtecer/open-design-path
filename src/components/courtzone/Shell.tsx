@@ -33,8 +33,8 @@ export const Sidebar = ({ activeId, navigate, role }: any) => {
   const visible = NAV.filter((item) => {
     if (item.section) return !item.role || item.role === role || role === 'admin';
     if (role === 'admin') return true;
-    if (role === 'organizer') return item.role !== 'admin';
-    return item.role !== 'admin' && item.role !== 'organizer';
+    // Player can access everything except admin-only items.
+    return item.role !== 'admin';
   });
   return (
     <aside className="sidebar">
@@ -55,7 +55,7 @@ export const Sidebar = ({ activeId, navigate, role }: any) => {
         <Avatar src={PLAYERS[0].avatar} name={PLAYERS[0].name} size={32} />
         <div className="grow">
           <div className="uname">{PLAYERS[0].name}</div>
-          <div className="urole">{role === 'admin' ? 'Super admin' : role === 'organizer' ? 'Organizer · Player' : 'Player · #1842'}</div>
+          <div className="urole">{role === 'admin' ? 'Super admin' : 'Player · #1842'}</div>
         </div>
         <Icon name="settings" size={14} className="muted" />
       </div>
