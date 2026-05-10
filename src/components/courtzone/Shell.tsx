@@ -14,8 +14,6 @@ const NAV: any[] = [
   { id: 'o_dashboard', label: 'Organizer hub', icon: 'shield', role: 'all' },
   { id: 'o_create_l', label: 'Create league', icon: 'plus', role: 'all' },
   { id: 'o_create_t', label: 'Create tournament', icon: 'plus', role: 'all' },
-  { id: 'o_league', label: 'League: Warszawa Open', icon: 'flag', role: 'all' },
-  { id: 'o_tournament', label: 'Cup: Mazovia Spring', icon: 'bracket', role: 'all' },
   { id: 'o_match_l', label: 'Match management', icon: 'court', role: 'all' },
   { section: 'Admin', role: 'admin' },
   { id: 'a_dashboard', label: 'Platform overview', icon: 'chart', role: 'admin' },
