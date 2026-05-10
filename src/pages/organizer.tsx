@@ -73,10 +73,10 @@ const CreateLeague = ({ navigate }) => {
           </Field>
         </div>}
 
-        {step === 2 && <div style={{ display:'grid', gap: 16 }}>
-          <div>
+        {step === 2 && <div style={{ display:'grid', gridTemplateColumns:'minmax(0, 1fr)', gap: 16 }}>
+          <div style={{ minWidth: 0 }}>
             <label style={{ fontSize: 12, fontWeight: 600, color:'var(--ink-2)' }}>League format</label>
-            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap: 8, marginTop: 8 }}>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(3, minmax(0, 1fr))', gap: 8, marginTop: 8 }}>
               {[
                 { id: 'round-robin', t: 'Round-robin', s: 'Everyone plays everyone. Points per match.' },
                 { id: 'ladder', t: 'Ladder', s: 'Challenge anyone within N spots above you.' },
@@ -84,7 +84,7 @@ const CreateLeague = ({ navigate }) => {
               ].map(f => (
                 <button key={f.id} onClick={()=>setFormat(f.id)}
                   style={{ padding: 14, borderRadius: 12, border: '1px solid', borderColor: format===f.id?'var(--primary)':'var(--line)',
-                           background: format===f.id?'var(--surface)':'transparent', textAlign:'left',
+                           background: format===f.id?'var(--surface)':'transparent', textAlign:'left', minWidth: 0,
                            boxShadow: format===f.id?'0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent)':'none' }}>
                   <Icon name="trophy" size={18} style={{ color: format===f.id?'var(--primary)':'var(--ink-3)' }}/>
                   <div style={{ fontWeight: 700, marginTop: 6, fontSize: 13 }}>{f.t}</div>
@@ -93,9 +93,9 @@ const CreateLeague = ({ navigate }) => {
               ))}
             </div>
           </div>
-          <div className="card" style={{ padding: 16, background:'var(--surface-2)', borderStyle:'dashed' }}>
+          <div className="card" style={{ padding: 16, background:'var(--surface-2)', borderStyle:'dashed', minWidth: 0 }}>
             <div className="eyebrow">Scoring rules</div>
-            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap: 12, marginTop: 8 }}>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(3, minmax(0, 1fr))', gap: 12, marginTop: 8 }}>
               <Field label="Win"><input className="input" defaultValue="3 pts"/></Field>
               <Field label="Loss in 3 sets"><input className="input" defaultValue="1 pt"/></Field>
               <Field label="Walkover"><input className="input" defaultValue="0 pts"/></Field>
