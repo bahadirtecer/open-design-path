@@ -14,10 +14,18 @@ import { FacilityPicker } from '@/components/courtzone/FacilityPicker';
 // Organizer pages 12-19: Create league, League detail, Standings, Match mgmt,
 // Create tournament, Tournament detail, Bracket, Tournament match mgmt
 
+const DISCIPLINES = [
+  { id: 'singles', t: 'Singles', s: '1 vs 1.' },
+  { id: 'doubles', t: 'Doubles', s: '2 vs 2 — partners required.' },
+  { id: 'mixed', t: 'Mixed doubles', s: 'One female + one male per side.' },
+];
+
 const CreateLeague = ({ navigate }) => {
   const [format, setFormat] = useState('round-robin');
+  const [discipline, setDiscipline] = useState('');
   const [step, setStep] = useState(1);
   const [facility, setFacility] = useState('');
+  const disciplineMissing = !discipline;
   return (
     <div className="page page--narrow">
       <PageHeader
