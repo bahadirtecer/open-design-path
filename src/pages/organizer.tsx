@@ -17,6 +17,7 @@ import { FacilityPicker } from '@/components/courtzone/FacilityPicker';
 const CreateLeague = ({ navigate }) => {
   const [format, setFormat] = useState('round-robin');
   const [step, setStep] = useState(1);
+  const [facility, setFacility] = useState('');
   return (
     <div className="page page--narrow">
       <PageHeader
