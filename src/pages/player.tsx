@@ -431,8 +431,8 @@ const LeagueDetailPlayer = ({ navigate, id }: any) => {
         </div>
       </div>
 
-      {tab === 'standings' && <Standings/>}
-      {tab === 'ladder' && <Ladder/>}
+      {tab === 'standings' && <LeagueStandings league={l}/>}
+      {tab === 'ladder' && <Ladder league={l}/>}
       {tab === 'recent' && <RecentResults leagueId={l.id}/>}
 
       {tab === 'mymatches' && <Card title="My matches in this league">
