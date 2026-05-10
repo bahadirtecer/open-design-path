@@ -9,6 +9,7 @@ import {
 } from '@/components/courtzone/atoms';
 import { TL_DATA } from '@/lib/mock-data';
 import { LiveBadge, ViewerBadge, FeaturedLive } from './live';
+import { Standings } from './organizer';
 
 // Player pages 20-26: My competitions, League player view, Tournament player view,
 // Match result entry, Match history, My profile, Public profile
