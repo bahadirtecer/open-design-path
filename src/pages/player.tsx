@@ -15,44 +15,267 @@ import { LiveBadge, ViewerBadge, FeaturedLive } from './live';
 
 const MyCompetitions = ({ navigate }) => {
   const D = TL_DATA;
-  const [tab, setTab] = useState('active');
-  const items = tab === 'active' ? [...D.LEAGUES.filter(l=>l.status==='active'), ...D.TOURNAMENTS.filter(t=>t.status==='active')]
-              : tab === 'past' ? [...D.LEAGUES.filter(l=>l.status==='past'), ...D.TOURNAMENTS.filter(t=>t.status==='past')]
-              : [...D.LEAGUES.filter(l=>l.status==='upcoming'), ...D.TOURNAMENTS.filter(t=>t.status==='upcoming')];
+  const [tab, setTab] = useState('overview');
+  const me = D.PLAYERS[0];
+
+  // Mock data for the hub experience
+  const myComps = [
+    ...D.LEAGUES.filter(l => l.status === 'active').slice(0, 2).map(l => ({ ...l, kind: 'league' })),
+    ...D.TOURNAMENTS.filter(t => t.status === 'active').slice(0, 1).map(t => ({ ...t, kind: 'tournament' })),
+    ...D.LEAGUES.filter(l => l.status === 'upcoming').slice(0, 1).map(l => ({ ...l, kind: 'league' })),
+  ];
+
+  // Matches awaiting scheduling — opponent offered time slots
+  const schedulingMatches = [
+    { id: 'sm1', league: 'Warszawa Open Spring', round: 'R4', opponent: D.PLAYERS[2], proposedBy: 'opponent',
+      slots: [
+        { id: 's1', date: 'Tue · May 12', time: '18:00', court: 'Polna · Court 2' },
+        { id: 's2', date: 'Wed · May 13', time: '19:30', court: 'Polna · Court 1' },
+        { id: 's3', date: 'Sat · May 16', time: '10:00', court: 'Polna · Court 3' },
+      ]},
+    { id: 'sm2', league: 'Trójmiasto Premier', round: 'R2', opponent: D.PLAYERS[5], proposedBy: 'me',
+      slots: [
+        { id: 's1', date: 'Sat · May 18', time: '14:00', court: 'Sopot Centre · Court 1' },
+        { id: 's2', date: 'Sun · May 19', time: '11:00', court: 'Sopot Centre · Court 2' },
+      ]},
+  ];
+
+  // Confirmed upcoming matches
+  const upcomingMatches = D.MATCHES.filter(m => m.status === 'scheduled' && m.mine);
+
+  // Results that need YOUR confirmation (opponent submitted)
+  const resultsToConfirm = [
+    { id: 'rc1', league: 'Warszawa Open Spring', round: 'R3', opponent: D.PLAYERS[3],
+      score: '6-4, 6-3', submittedBy: D.PLAYERS[3].name, hoursLeft: 18, iWon: false },
+  ];
+
+  // Results I submitted, awaiting opponent (auto-confirm in 24h)
+  const awaitingOpponent = [
+    { id: 'ao1', league: 'Warszawa Open Spring', round: 'R2', opponent: D.PLAYERS[6],
+      score: '6-2, 6-1', hoursLeft: 9, iWon: true },
+  ];
+
+  const enterResult = (m) => { window.TL_SELECTED_MATCH = m; navigate('p_match_entry'); };
+
   return (
     <div className="page page--wide">
-      <PageHeader eyebrow="My play" title="My leagues & cups." sub="You're in 4 leagues and 2 tournaments. 11 matches scheduled this month."
-        action={<Btn variant="primary" icon="qr" onClick={()=>navigate('u_qr')}>Scan to join</Btn>}/>
+      <PageHeader
+        eyebrow="My play"
+        title="My leagues & cups."
+        sub={`${myComps.length} competitions · ${upcomingMatches.length} upcoming · ${resultsToConfirm.length} awaiting your confirmation.`}
+        action={<Btn variant="primary" icon="qr" onClick={()=>navigate('u_qr')}>Scan to join</Btn>}
+      />
+
       <Tabs active={tab} onChange={setTab} tabs={[
-        { id:'active', label:'Active', count: 5 },
-        { id:'invites', label:'Invites', count: 2 },
-        { id:'past', label:'Past', count: 8 },
+        { id:'overview', label:'Overview' },
+        { id:'comps', label:'My competitions', count: myComps.length },
+        { id:'matches', label:'Matches', count: upcomingMatches.length + schedulingMatches.length },
+        { id:'results', label:'Results', count: resultsToConfirm.length + awaitingOpponent.length },
       ]}/>
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap: 16 }}>
-        {items.map(e => (
-          <EntityCard key={e.id} e={e} kind={e.fee?'tournament':'league'} onClick={()=>navigate(e.fee?'p_tournament_detail':'p_league_detail')}/>
-        ))}
-      </div>
-      {tab === 'invites' && (
-        <div style={{ marginTop: 24, display:'grid', gap: 12 }}>
-          <Card title="Pending invitations">
-            {D.LEAGUES.slice(3,5).map(l => (
-              <div key={l.id} className="row" style={{ gap: 12, padding: '12px 0', borderTop:'1px solid var(--line)' }}>
-                <div className="photo" style={{ width: 48, height: 48, backgroundImage:`url(${l.cover})`, backgroundSize:'cover', borderRadius: 10 }}/>
-                <div className="grow">
-                  <div style={{ fontWeight: 700 }}>{l.name}</div>
-                  <div className="muted" style={{ fontSize: 12 }}>Invited by {l.org} · expires in 5 days</div>
-                </div>
-                <Btn variant="ghost" size="sm">Decline</Btn>
-                <Btn variant="primary" size="sm">Accept</Btn>
+
+      {tab === 'overview' && (
+        <div style={{ display:'grid', gap: 20 }}>
+          {/* Top: stats */}
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap: 12 }}>
+            <Stat label="Active competitions" value={myComps.length}/>
+            <Stat label="To schedule" value={schedulingMatches.length}/>
+            <Stat label="Upcoming matches" value={upcomingMatches.length}/>
+            <Stat label="Pending confirmations" value={resultsToConfirm.length + awaitingOpponent.length}/>
+          </div>
+
+          {/* Scheduling requests */}
+          {schedulingMatches.length > 0 && (
+            <Card title="Confirm match date & time" action={<Chip tone="warn" dot>{schedulingMatches.length} pending</Chip>}>
+              <div style={{ display:'grid', gap: 14 }}>
+                {schedulingMatches.map(sm => <ScheduleMatchCard key={sm.id} m={sm}/>)}
               </div>
-            ))}
+            </Card>
+          )}
+
+          {/* Results to confirm */}
+          {resultsToConfirm.length > 0 && (
+            <Card title="Results awaiting your confirmation" action={<Chip tone="bad" dot>Action needed</Chip>}>
+              <div style={{ display:'grid', gap: 10 }}>
+                {resultsToConfirm.map(r => <ConfirmResultRow key={r.id} r={r}/>)}
+              </div>
+            </Card>
+          )}
+
+          {/* Upcoming + enter result */}
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap: 16 }}>
+            <Card title="Upcoming matches">
+              {upcomingMatches.length === 0
+                ? <div className="muted" style={{ fontSize: 13 }}>Nothing scheduled yet.</div>
+                : upcomingMatches.map(m => <MatchRow key={m.id} m={m} onClick={()=>enterResult(m)}/>)}
+            </Card>
+            <Card title="Awaiting opponent confirmation" action={<Chip>Auto-confirm 24h</Chip>}>
+              {awaitingOpponent.length === 0
+                ? <div className="muted" style={{ fontSize: 13 }}>No pending results.</div>
+                : awaitingOpponent.map(r => <AwaitingOpponentRow key={r.id} r={r}/>)}
+            </Card>
+          </div>
+
+          {/* My competitions */}
+          <Card title="My competitions" action={<Btn variant="ghost" size="sm" onClick={()=>setTab('comps')}>View all</Btn>}>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap: 16 }}>
+              {myComps.slice(0, 3).map(e => (
+                <EntityCard key={e.id} e={e} kind={e.kind}
+                  onClick={()=>navigate(e.kind==='tournament'?'p_tournament_detail':'p_league_detail')}/>
+              ))}
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {tab === 'comps' && (
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap: 16 }}>
+          {myComps.map(e => (
+            <EntityCard key={e.id} e={e} kind={e.kind}
+              onClick={()=>navigate(e.kind==='tournament'?'p_tournament_detail':'p_league_detail')}/>
+          ))}
+        </div>
+      )}
+
+      {tab === 'matches' && (
+        <div style={{ display:'grid', gap: 20 }}>
+          {schedulingMatches.length > 0 && (
+            <Card title="To schedule">
+              <div style={{ display:'grid', gap: 14 }}>
+                {schedulingMatches.map(sm => <ScheduleMatchCard key={sm.id} m={sm}/>)}
+              </div>
+            </Card>
+          )}
+          <Card title="Upcoming (confirmed)">
+            {upcomingMatches.length === 0
+              ? <div className="muted" style={{ fontSize: 13 }}>No upcoming matches.</div>
+              : <div style={{ display:'grid', gap: 8 }}>
+                  {upcomingMatches.map(m => (
+                    <div key={m.id} className="row" style={{ gap: 10, padding: 12, borderTop:'1px solid var(--line)', alignItems:'center' }}>
+                      <div className="grow">
+                        <MatchRow m={m}/>
+                      </div>
+                      <Btn variant="primary" size="sm" icon="plus" onClick={()=>enterResult(m)}>Enter result</Btn>
+                    </div>
+                  ))}
+                </div>
+            }
+          </Card>
+        </div>
+      )}
+
+      {tab === 'results' && (
+        <div style={{ display:'grid', gap: 20 }}>
+          {resultsToConfirm.length > 0 && (
+            <Card title="Awaiting your confirmation">
+              <div style={{ display:'grid', gap: 10 }}>
+                {resultsToConfirm.map(r => <ConfirmResultRow key={r.id} r={r}/>)}
+              </div>
+            </Card>
+          )}
+          {awaitingOpponent.length > 0 && (
+            <Card title="Awaiting opponent" action={<Chip>Auto-confirm at 24h</Chip>}>
+              <div style={{ display:'grid', gap: 10 }}>
+                {awaitingOpponent.map(r => <AwaitingOpponentRow key={r.id} r={r}/>)}
+              </div>
+            </Card>
+          )}
+          <Card title="Recent completed">
+            {D.MATCHES.filter(m => m.status==='completed' && m.mine).map(m => <MatchRow key={m.id} m={m}/>)}
           </Card>
         </div>
       )}
     </div>
   );
 };
+
+// Sub-component: opponent (or you) proposed 2-3 time slots, pick one
+const ScheduleMatchCard = ({ m }: any) => {
+  const [selected, setSelected] = useState(null);
+  const [done, setDone] = useState(false);
+  if (done) {
+    const slot = m.slots.find(s => s.id === selected);
+    return (
+      <div className="row" style={{ gap: 12, padding: 12, borderRadius: 10, background:'color-mix(in srgb, var(--good) 8%, transparent)', alignItems:'center' }}>
+        <Icon name="check" size={18}/>
+        <div className="grow">
+          <div style={{ fontWeight: 700, fontSize: 13 }}>{m.league} · {m.round} vs {m.opponent.name}</div>
+          <div className="muted" style={{ fontSize: 12 }}>Locked: {slot?.date} at {slot?.time} · {slot?.court}</div>
+        </div>
+        <Chip tone="good" dot>Confirmed</Chip>
+      </div>
+    );
+  }
+  return (
+    <div style={{ padding: 14, border:'1px solid var(--line)', borderRadius: 12 }}>
+      <div className="row" style={{ gap: 10, marginBottom: 10, alignItems:'center' }}>
+        <Avatar src={m.opponent.avatar} name={m.opponent.name} size={36}/>
+        <div className="grow">
+          <div style={{ fontWeight: 700, fontSize: 14 }}>{m.opponent.name}</div>
+          <div className="muted" style={{ fontSize: 12 }}>{m.league} · {m.round}</div>
+        </div>
+        <Chip tone={m.proposedBy === 'opponent' ? 'warn' : 'primary'}>
+          {m.proposedBy === 'opponent' ? 'Opponent proposed' : 'You proposed'}
+        </Chip>
+      </div>
+      <div className="eyebrow" style={{ marginBottom: 8 }}>Pick one option</div>
+      <div style={{ display:'grid', gap: 8 }}>
+        {m.slots.map(s => (
+          <label key={s.id} className="row" style={{ gap: 10, padding: 10, borderRadius: 8,
+            border: selected === s.id ? '2px solid var(--primary)' : '1px solid var(--line)',
+            cursor:'pointer', alignItems:'center' }}>
+            <input type="radio" name={`slot-${m.id}`} checked={selected === s.id} onChange={()=>setSelected(s.id)}/>
+            <Icon name="calendar" size={14}/>
+            <div className="grow">
+              <div style={{ fontWeight: 600, fontSize: 13 }}>{s.date} · {s.time}</div>
+              <div className="muted" style={{ fontSize: 11 }}>{s.court}</div>
+            </div>
+          </label>
+        ))}
+      </div>
+      <div className="row" style={{ gap: 8, marginTop: 12, justifyContent:'flex-end' }}>
+        <Btn variant="ghost" size="sm">Suggest other times</Btn>
+        <Btn variant="primary" size="sm" disabled={!selected} iconRight="check" onClick={()=>setDone(true)}>Confirm slot</Btn>
+      </div>
+    </div>
+  );
+};
+
+const ConfirmResultRow = ({ r }: any) => {
+  const [done, setDone] = useState(null); // 'confirmed' | 'disputed' | null
+  if (done === 'confirmed') {
+    return <div className="row" style={{ gap: 10, padding: 12, borderRadius: 10, background:'color-mix(in srgb, var(--good) 8%, transparent)', alignItems:'center' }}>
+      <Icon name="check" size={16}/><div className="grow" style={{ fontSize: 13 }}>Result confirmed · standings updated.</div>
+    </div>;
+  }
+  if (done === 'disputed') {
+    return <div className="row" style={{ gap: 10, padding: 12, borderRadius: 10, background:'color-mix(in srgb, var(--bad) 8%, transparent)', alignItems:'center' }}>
+      <Icon name="flash" size={16}/><div className="grow" style={{ fontSize: 13 }}>Marked as disputed · captain notified.</div>
+    </div>;
+  }
+  return (
+    <div className="row" style={{ gap: 12, padding: 12, borderRadius: 10, border:'1px solid var(--line)', alignItems:'center' }}>
+      <Avatar src={r.opponent.avatar} name={r.opponent.name} size={36}/>
+      <div className="grow" style={{ minWidth: 0 }}>
+        <div style={{ fontWeight: 700, fontSize: 13 }}>{r.opponent.name} reported <span className="mono">{r.score}</span></div>
+        <div className="muted" style={{ fontSize: 12 }}>{r.league} · {r.round} · Auto-confirms in {r.hoursLeft}h</div>
+      </div>
+      <Btn variant="ghost" size="sm" onClick={()=>setDone('disputed')}>Dispute</Btn>
+      <Btn variant="primary" size="sm" icon="check" onClick={()=>setDone('confirmed')}>Confirm</Btn>
+    </div>
+  );
+};
+
+const AwaitingOpponentRow = ({ r }: any) => (
+  <div className="row" style={{ gap: 12, padding: 12, borderRadius: 10, border:'1px solid var(--line)', alignItems:'center' }}>
+    <Avatar src={r.opponent.avatar} name={r.opponent.name} size={36}/>
+    <div className="grow" style={{ minWidth: 0 }}>
+      <div style={{ fontWeight: 700, fontSize: 13 }}>vs {r.opponent.name} · <span className="mono">{r.score}</span></div>
+      <div className="muted" style={{ fontSize: 12 }}>{r.league} · {r.round} · Auto-confirms in {r.hoursLeft}h if no response</div>
+    </div>
+    <Chip tone={r.iWon ? 'good' : 'bad'} dot>{r.iWon ? 'You won' : 'You lost'}</Chip>
+    <Btn variant="ghost" size="sm" icon="bell">Nudge</Btn>
+  </div>
+);
 
 const LeagueDetailPlayer = ({ navigate }) => {
   const D = TL_DATA;
