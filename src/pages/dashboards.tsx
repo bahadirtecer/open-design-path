@@ -9,6 +9,8 @@ import {
 } from '@/components/courtzone/atoms';
 import { TL_DATA } from '@/lib/mock-data';
 import { LiveBadge, ViewerBadge, FeaturedLive } from './live';
+import { useTweaks } from '@/lib/use-tweaks';
+import createCompetitionImg from '@/assets/create-competition.jpg';
 
 // Dashboards 7-9: Player, Organizer, Super admin
 
@@ -104,8 +106,57 @@ const PlayerDashboard = ({ navigate }) => {
   );
 };
 
+const OrganizerEmpty = ({ navigate }) => (
+  <div className="page">
+    <PageHeader
+      eyebrow="Organizer hub"
+      title="Run your own league or cup."
+      sub="You haven't organized any competition yet. Create one in minutes — invite players, auto-schedule matches and let CourtZone handle scoring."
+    />
+    <Card pad={false}>
+      <div style={{ display:'grid', gridTemplateColumns:'1.1fr 1fr', gap: 0, alignItems:'stretch' }}>
+        <div style={{ padding: 36, display:'flex', flexDirection:'column', justifyContent:'center', gap: 18 }}>
+          <div style={{ display:'flex', gap: 8, flexWrap:'wrap' }}>
+            <Chip tone="primary" dot>New competition</Chip>
+            <Chip>Free to start</Chip>
+          </div>
+          <div>
+            <div style={{ fontFamily:'var(--font-display)', fontSize: 32, lineHeight: 1.1, fontStyle:'italic', marginBottom: 8 }}>
+              From idea to first match in 5 minutes.
+            </div>
+            <div className="muted" style={{ fontSize: 13.5, lineHeight: 1.6 }}>
+              Pick a format, set the dates, share a QR code. You'll become the organizer of your competition and unlock the full hub: standings, disputes, brackets, announcements.
+            </div>
+          </div>
+          <ul style={{ display:'grid', gap: 8, fontSize: 13, color:'var(--ink-2)' }}>
+            <li className="row" style={{ gap: 10 }}><Icon name="flag" size={14}/> Round-robin, ladder or ATP-style league</li>
+            <li className="row" style={{ gap: 10 }}><Icon name="bracket" size={14}/> Single / double elimination cup brackets</li>
+            <li className="row" style={{ gap: 10 }}><Icon name="qr" size={14}/> One QR code to onboard every player</li>
+          </ul>
+          <div className="row" style={{ gap: 10, marginTop: 4 }}>
+            <Btn variant="primary" icon="plus" onClick={()=>navigate('o_create_l')}>New league</Btn>
+            <Btn variant="soft" icon="plus" onClick={()=>navigate('o_create_t')}>New tournament</Btn>
+          </div>
+        </div>
+        <div style={{ background:'var(--bg-2)', display:'grid', placeItems:'center', padding: 24 }}>
+          <img
+            src={createCompetitionImg}
+            alt="Empty tournament bracket illustration"
+            loading="lazy"
+            width={1024}
+            height={640}
+            style={{ width:'100%', height:'auto', maxWidth: 520, borderRadius: 12, boxShadow:'var(--shadow-md)' }}
+          />
+        </div>
+      </div>
+    </Card>
+  </div>
+);
+
 const OrganizerDashboard = ({ navigate }) => {
   const D = TL_DATA;
+  const [t] = useTweaks();
+  if (t.organizing === 'none') return <OrganizerEmpty navigate={navigate} />;
   return (
     <div className="page page--wide">
       <PageHeader

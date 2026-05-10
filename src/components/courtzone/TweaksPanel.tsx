@@ -44,6 +44,14 @@ const SECTIONS = [
       { v: 'admin', l: 'Admin' },
     ],
   },
+  {
+    key: 'organizing',
+    label: 'Organizing',
+    options: [
+      { v: 'none', l: 'New' },
+      { v: 'active', l: 'Active' },
+    ],
+  },
 ];
 
 export function TweaksPanel() {
