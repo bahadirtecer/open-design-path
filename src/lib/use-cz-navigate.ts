@@ -47,6 +47,7 @@ const ROUTE_MAP: Record<string, { to: string; params?: Record<string, string> }>
   // admin
   a_users:               { to: '/admin/users' },
   a_orgs:                { to: '/admin/orgs' },
+  a_facilities:          { to: '/admin/facilities' },
   a_reports:             { to: '/admin/reports' },
 };
 

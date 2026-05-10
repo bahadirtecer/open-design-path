@@ -12,7 +12,7 @@ const PATH_TO_ID: Record<string, string> = {
   '/organizer/create-league': 'o_create_l', '/organizer/create-tournament': 'o_create_t',
   '/organizer/matches': 'o_match_l',
   '/profile': 'u_profile', '/notifications': 'u_notifications', '/messages': 'u_messages',
-  '/qr': 'u_qr', '/admin/users': 'a_users', '/admin/orgs': 'a_orgs', '/admin/reports': 'a_reports',
+  '/qr': 'u_qr', '/admin/users': 'a_users', '/admin/orgs': 'a_orgs', '/admin/facilities': 'a_facilities', '/admin/reports': 'a_reports',
 };
 
 const ID_TO_LABEL: Record<string, string> = {
@@ -22,7 +22,7 @@ const ID_TO_LABEL: Record<string, string> = {
   o_create_l: 'Create league', o_create_t: 'Create tournament',
   o_match_l: 'Match management',
   u_profile: 'My profile', u_notifications: 'Notifications', u_messages: 'Inbox',
-  u_qr: 'QR scanner', a_users: 'User management', a_orgs: 'Organizations', a_reports: 'Reports',
+  u_qr: 'QR scanner', a_users: 'User management', a_orgs: 'Organizations', a_facilities: 'Facility management', a_reports: 'Reports',
 };
 
 export const Route = createFileRoute('/_app')({
