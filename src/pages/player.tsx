@@ -132,7 +132,7 @@ const MyCompetitions = ({ navigate }) => {
         <div style={{ display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap: 16 }}>
           {myComps.map(e => (
             <EntityCard key={e.id} e={e} kind={e.kind}
-              onClick={()=>navigate(e.kind==='tournament'?'p_tournament_detail':'p_league_detail')}/>
+              onClick={()=>navigate(e.kind==='tournament'?'p_tournament_detail':'p_league_detail', { id: e.id })}/>
           ))}
         </div>
       )}
