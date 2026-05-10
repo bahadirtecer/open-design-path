@@ -303,7 +303,7 @@ const MyProfile = ({ navigate }) => {
               </div>
               <div>
                 <div className="h2">{me.name}</div>
-                <div className="muted">@{me.handle} · {me.city}</div>
+                <div className="muted">{me.city}</div>
               </div>
               <div className="row" style={{ gap: 8 }}>
                 <Chip tone="primary">Player</Chip>
@@ -324,9 +324,22 @@ const MyProfile = ({ navigate }) => {
           <Card title="Personal info">
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap: 12 }}>
               <Field label="Display name"><input className="input" defaultValue={me.name}/></Field>
-              <Field label="Handle"><input className="input" defaultValue={me.handle}/></Field>
+              <Field label="Email"><input className="input" type="email" defaultValue={`${me.handle}@example.com`}/></Field>
+              <Field label="Phone"><input className="input" type="tel" defaultValue="+48 600 000 000"/></Field>
               <Field label="City"><input className="input" defaultValue={me.city}/></Field>
               <Field label="Date of birth"><input className="input" type="date" defaultValue="1995-04-22"/></Field>
+              <Field label="Years playing tennis"><input className="input" type="number" min="0" defaultValue="8"/></Field>
+              <Field label="Skill level">
+                <select className="select" defaultValue="Intermediate">
+                  <option>Beginner</option>
+                  <option>Improver</option>
+                  <option>Intermediate</option>
+                  <option>Advanced</option>
+                  <option>Competitive</option>
+                  <option>Pro</option>
+                </select>
+              </Field>
+              <Field label="NTRP / UTR (optional)"><input className="input" placeholder="e.g. NTRP 4.0 / UTR 7"/></Field>
               <Field label="Racket hand"><select className="select"><option>Right</option><option>Left</option></select></Field>
               <Field label="Backhand"><select className="select"><option>One-handed</option><option>Two-handed</option></select></Field>
               <Field span={2} label="Bio"><textarea className="textarea" rows="3" defaultValue="Tournament regular at WTC. Prefer clay; my serve gets nasty after a third coffee."/></Field>
