@@ -1,6 +1,7 @@
 // @ts-nocheck
 // Tweaks (theme/density/bracket/role) state with localStorage persistence.
-import { useEffect, useState } from 'react';
+// Shared store so all components stay in sync.
+import { useEffect, useSyncExternalStore } from 'react';
 
 export type Tweaks = {
   theme: string;
@@ -8,7 +9,7 @@ export type Tweaks = {
   density: string;
   bracket: string;
   role: 'player' | 'admin';
-  organizing: 'none' | 'active'; // does the player currently run any competitions?
+  organizing: 'none' | 'active';
 };
 
 const DEFAULTS: Tweaks = {
@@ -22,32 +23,57 @@ const DEFAULTS: Tweaks = {
 
 const KEY = 'cz_tweaks_v1';
 
+function load(): Tweaks {
+  if (typeof localStorage === 'undefined') return DEFAULTS;
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return DEFAULTS;
+    const parsed = JSON.parse(raw);
+    if (parsed.role === 'organizer') parsed.role = 'player';
+    return { ...DEFAULTS, ...parsed };
+  } catch { return DEFAULTS; }
+}
+
+let state: Tweaks = DEFAULTS;
+let hydrated = false;
+const listeners = new Set<() => void>();
+
+function emit() { listeners.forEach((l) => l()); }
+
+function applyDom(t: Tweaks) {
+  if (typeof document === 'undefined') return;
+  const b = document.body;
+  if (t.theme) b.setAttribute('data-theme', t.theme); else b.removeAttribute('data-theme');
+  if (t.aesthetic) b.setAttribute('data-aesthetic', t.aesthetic); else b.removeAttribute('data-aesthetic');
+  b.setAttribute('data-density', t.density);
+  b.setAttribute('data-bracket', t.bracket);
+  b.setAttribute('data-role', t.role);
+}
+
+function subscribe(l: () => void) {
+  listeners.add(l);
+  return () => listeners.delete(l);
+}
+
+function getSnapshot() { return state; }
+function getServerSnapshot() { return DEFAULTS; }
+
+function setTweak(k: keyof Tweaks, v: string) {
+  state = { ...state, [k]: v };
+  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
+  applyDom(state);
+  emit();
+}
+
 export function useTweaks() {
-  const [t, setT] = useState<Tweaks>(DEFAULTS);
-
+  const t = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        // Migrate legacy 'organizer' role → 'player' (organizer role removed).
-        if (parsed.role === 'organizer') parsed.role = 'player';
-        setT({ ...DEFAULTS, ...parsed });
-      }
-    } catch {}
+    if (!hydrated) {
+      hydrated = true;
+      state = load();
+      applyDom(state);
+      emit();
+    }
   }, []);
-
-  useEffect(() => {
-    if (typeof document === 'undefined') return;
-    const b = document.body;
-    if (t.theme) b.setAttribute('data-theme', t.theme); else b.removeAttribute('data-theme');
-    if (t.aesthetic) b.setAttribute('data-aesthetic', t.aesthetic); else b.removeAttribute('data-aesthetic');
-    b.setAttribute('data-density', t.density);
-    b.setAttribute('data-bracket', t.bracket);
-    b.setAttribute('data-role', t.role);
-    try { localStorage.setItem(KEY, JSON.stringify(t)); } catch {}
-  }, [t]);
-
-  const setTweak = (k: keyof Tweaks, v: string) => setT((p) => ({ ...p, [k]: v }));
   return [t, setTweak] as const;
 }
