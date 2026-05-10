@@ -43,8 +43,8 @@
 /* ===== CourtZone design tokens ===== */
 :root {
   /* COURT (default) */
-  --bg: #f6f1e8;
-  --bg-2: #efe7d7;
+  --bg: #faf6ef;
+  --bg-2: #f3ecdd;
   --surface: #ffffff;
   --surface-2: #fbf6ed;
   --ink: #15211c;
