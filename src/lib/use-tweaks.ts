@@ -13,7 +13,7 @@ export type Tweaks = {
 };
 
 const DEFAULTS: Tweaks = {
-  theme: 'vercel',
+  theme: '',
   aesthetic: '',
   density: 'comfortable',
   bracket: 'horizontal',
@@ -21,7 +21,7 @@ const DEFAULTS: Tweaks = {
   organizing: 'active',
 };
 
-const KEY = 'cz_tweaks_v1';
+const KEY = 'cz_tweaks_v2';
 
 function load(): Tweaks {
   if (typeof localStorage === 'undefined') return DEFAULTS;
