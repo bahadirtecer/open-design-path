@@ -907,7 +907,8 @@ body[data-theme="dark"] {
   -webkit-font-smoothing: antialiased;
 }
 
-
+/* ===================================================================
+   VERCEL THEME — Geist + sharp lines + monochrome with blue accent
    Activated via body[data-theme="vercel"]
    =================================================================== */
 [data-theme="vercel"] {
