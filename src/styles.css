@@ -290,9 +290,11 @@ img { display: block; max-width: 100%; }
   border-radius: 10px;
   background: var(--surface);
   border: 1px solid var(--line);
+  color: var(--ink);
   position: relative;
 }
-.icon-btn:hover { border-color: var(--line-2); }
+.icon-btn svg { stroke: currentColor; color: var(--ink); }
+.icon-btn:hover { border-color: var(--line-2); color: var(--ink); }
 .icon-btn .dot {
   position: absolute; top: 8px; right: 9px;
   width: 7px; height: 7px; border-radius: 50%;
