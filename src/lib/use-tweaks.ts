@@ -3,11 +3,12 @@
 import { useEffect, useState } from 'react';
 
 export type Tweaks = {
-  theme: string;     // body[data-theme] override (e.g. 'vercel') or '' to use aesthetic only
-  aesthetic: string; // [data-aesthetic] (e.g. '' / 'editorial' / 'neo')
-  density: string;   // 'compact' | 'comfortable'
-  bracket: string;   // 'horizontal' | 'vertical'
+  theme: string;
+  aesthetic: string;
+  density: string;
+  bracket: string;
   role: 'player' | 'admin';
+  organizing: 'none' | 'active'; // does the player currently run any competitions?
 };
 
 const DEFAULTS: Tweaks = {
@@ -16,6 +17,7 @@ const DEFAULTS: Tweaks = {
   density: 'comfortable',
   bracket: 'horizontal',
   role: 'player',
+  organizing: 'active',
 };
 
 const KEY = 'cz_tweaks_v1';
