@@ -463,7 +463,9 @@ const CreateTournament = ({ navigate }) => {
         <div style={{ display:'grid', gap: 16 }}>
           <div style={{ display:'grid', gridTemplateColumns:'2fr 1fr', gap: 12 }}>
             <Field label="Tournament name"><input className="input" defaultValue="Mazovia Spring Cup 2026"/></Field>
-            <Field label="Organization"><select className="select"><option>Warszawa Tennis Club</option></select></Field>
+            <Field label="Facility" hint="Where matches are played">
+              <FacilityPicker value={facility} onChange={setFacility}/>
+            </Field>
           </div>
           <div>
             <label style={{ fontSize: 12, fontWeight: 600, color:'var(--ink-2)' }}>Format</label>
