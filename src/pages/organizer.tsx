@@ -14,10 +14,18 @@ import { FacilityPicker } from '@/components/courtzone/FacilityPicker';
 // Organizer pages 12-19: Create league, League detail, Standings, Match mgmt,
 // Create tournament, Tournament detail, Bracket, Tournament match mgmt
 
+const DISCIPLINES = [
+  { id: 'singles', t: 'Singles', s: '1 vs 1.' },
+  { id: 'doubles', t: 'Doubles', s: '2 vs 2 — partners required.' },
+  { id: 'mixed', t: 'Mixed doubles', s: 'One female + one male per side.' },
+];
+
 const CreateLeague = ({ navigate }) => {
   const [format, setFormat] = useState('round-robin');
+  const [discipline, setDiscipline] = useState('');
   const [step, setStep] = useState(1);
   const [facility, setFacility] = useState('');
+  const disciplineMissing = !discipline;
   return (
     <div className="page page--narrow">
       <PageHeader
@@ -42,6 +50,22 @@ const CreateLeague = ({ navigate }) => {
           <Field label="League name" hint="Visible on the registration poster">
             <input className="input" defaultValue="Warszawa Open Spring 2026"/>
           </Field>
+          <div>
+            <label style={{ fontSize: 12, fontWeight: 600, color:'var(--ink-2)' }}>Discipline <span style={{ color:'var(--danger, #c0392b)' }}>*</span></label>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(3, minmax(0, 1fr))', gap: 8, marginTop: 8 }}>
+              {DISCIPLINES.map(d => (
+                <button key={d.id} onClick={()=>setDiscipline(d.id)}
+                  style={{ padding: 14, borderRadius: 12, border:'1px solid', borderColor: discipline===d.id?'var(--primary)':'var(--line)',
+                           background: discipline===d.id?'var(--surface)':'transparent', textAlign:'left', minWidth: 0,
+                           boxShadow: discipline===d.id?'0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent)':'none' }}>
+                  <Icon name="users" size={18} style={{ color: discipline===d.id?'var(--primary)':'var(--ink-3)' }}/>
+                  <div style={{ fontWeight: 700, marginTop: 6, fontSize: 13 }}>{d.t}</div>
+                  <div className="muted" style={{ fontSize: 11.5, marginTop: 2 }}>{d.s}</div>
+                </button>
+              ))}
+            </div>
+            {disciplineMissing && <div className="muted" style={{ fontSize: 11.5, marginTop: 6 }}>Pick one — required before publishing.</div>}
+          </div>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap: 12 }}>
             <Field label="Facility" hint="Where matches will be played">
               <FacilityPicker value={facility} onChange={setFacility}/>
@@ -165,8 +189,8 @@ const CreateLeague = ({ navigate }) => {
         <div className="row" style={{ marginTop: 28, gap: 8, justifyContent: 'space-between' }}>
           <Btn variant="ghost" onClick={()=>setStep(Math.max(1, step-1))} disabled={step===1}>← Back</Btn>
           {step === 4
-            ? <Btn variant="primary" iconRight="check" onClick={()=>navigate('o_league')}>Publish league</Btn>
-            : <Btn variant="primary" iconRight="arrow_right" onClick={()=>setStep(step+1)}>Next: {['','Format & rules','Schedule','Branding','Publish'][step+1]}</Btn>}
+            ? <Btn variant="primary" iconRight="check" disabled={disciplineMissing} onClick={()=>!disciplineMissing && navigate('o_league')}>Publish league</Btn>
+            : <Btn variant="primary" iconRight="arrow_right" disabled={step===1 && disciplineMissing} onClick={()=>setStep(step+1)}>Next: {['','Format & rules','Schedule','Branding','Publish'][step+1]}</Btn>}
         </div>
       </Card>
     </div>
@@ -455,7 +479,9 @@ const ResultEntryModal = ({ m, onClose }) => (
 
 const CreateTournament = ({ navigate }) => {
   const [format, setFormat] = useState('single');
+  const [discipline, setDiscipline] = useState('');
   const [facility, setFacility] = useState('');
+  const disciplineMissing = !discipline;
   return (
     <div className="page page--narrow">
       <PageHeader eyebrow="New competition" title="Create a tournament." sub="One-shot bracket, fixed dates. Use a league instead if you want a multi-week format."/>
@@ -468,15 +494,31 @@ const CreateTournament = ({ navigate }) => {
             </Field>
           </div>
           <div>
+            <label style={{ fontSize: 12, fontWeight: 600, color:'var(--ink-2)' }}>Discipline <span style={{ color:'var(--danger, #c0392b)' }}>*</span></label>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(3, minmax(0, 1fr))', gap: 8, marginTop: 8 }}>
+              {DISCIPLINES.map(d => (
+                <button key={d.id} onClick={()=>setDiscipline(d.id)}
+                  style={{ padding: 14, borderRadius: 12, border:'1px solid', borderColor: discipline===d.id?'var(--primary)':'var(--line)',
+                           background: discipline===d.id?'var(--surface)':'transparent', textAlign:'left', minWidth: 0,
+                           boxShadow: discipline===d.id?'0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent)':'none' }}>
+                  <Icon name="users" size={18} style={{ color: discipline===d.id?'var(--primary)':'var(--ink-3)' }}/>
+                  <div style={{ fontWeight: 700, marginTop: 6, fontSize: 13 }}>{d.t}</div>
+                  <div className="muted" style={{ fontSize: 11.5, marginTop: 2 }}>{d.s}</div>
+                </button>
+              ))}
+            </div>
+            {disciplineMissing && <div className="muted" style={{ fontSize: 11.5, marginTop: 6 }}>Pick one — required before publishing.</div>}
+          </div>
+          <div>
             <label style={{ fontSize: 12, fontWeight: 600, color:'var(--ink-2)' }}>Format</label>
-            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap: 8, marginTop: 8 }}>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(3, minmax(0, 1fr))', gap: 8, marginTop: 8 }}>
               {[
                 { id: 'single', t: 'Single elimination', s: 'One loss, you\'re out. Standard cup format.' },
                 { id: 'double', t: 'Double elimination', s: 'Two losses to be eliminated. Loser\'s bracket.' },
                 { id: 'group', t: 'Group + KO', s: 'Round-robin groups, top N to playoff.' },
               ].map(f => (
                 <button key={f.id} onClick={()=>setFormat(f.id)}
-                  style={{ padding: 14, borderRadius: 12, textAlign:'left', border:'1px solid', borderColor: format===f.id?'var(--primary)':'var(--line)', background: format===f.id?'var(--surface)':'transparent' }}>
+                  style={{ padding: 14, borderRadius: 12, textAlign:'left', border:'1px solid', borderColor: format===f.id?'var(--primary)':'var(--line)', background: format===f.id?'var(--surface)':'transparent', minWidth: 0 }}>
                   <Icon name="bracket" size={18}/>
                   <div style={{ fontWeight: 700, marginTop: 6, fontSize: 13 }}>{f.t}</div>
                   <div className="muted" style={{ fontSize: 11.5, marginTop: 2 }}>{f.s}</div>
@@ -505,7 +547,7 @@ const CreateTournament = ({ navigate }) => {
           </Field>
           <div className="row" style={{ marginTop: 8, gap: 8, justifyContent:'flex-end' }}>
             <Btn variant="ghost" onClick={()=>navigate('o_dashboard')}>Save draft</Btn>
-            <Btn variant="primary" iconRight="check" onClick={()=>navigate('o_tournament')}>Publish & open registration</Btn>
+            <Btn variant="primary" iconRight="check" disabled={disciplineMissing} onClick={()=>!disciplineMissing && navigate('o_tournament')}>Publish & open registration</Btn>
           </div>
         </div>
       </Card>
