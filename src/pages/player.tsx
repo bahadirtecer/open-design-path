@@ -278,32 +278,94 @@ const AwaitingOpponentRow = ({ r }: any) => (
   </div>
 );
 
-const LeagueDetailPlayer = ({ navigate }) => {
+const Ladder = () => {
   const D = TL_DATA;
-  const l = D.LEAGUES[0];
+  return (
+    <Card title="Ladder" pad={false} action={<Btn variant="soft" size="sm" icon="flash">Challenge a player</Btn>}>
+      <table className="tbl">
+        <thead><tr><th>Rank</th><th>Player</th><th>City</th><th className="num">Rating</th><th className="num">W–L</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          {D.STANDINGS.map((p, i) => {
+            const me = i === 3;
+            const challengeable = Math.abs(i - 3) <= 4 && !me;
+            return (
+              <tr key={p.id} style={me ? { background:'color-mix(in srgb, var(--primary) 8%, transparent)' } : {}}>
+                <td><span className="rank">{i+1}</span></td>
+                <td><div className="row" style={{ gap: 10 }}><Avatar src={p.avatar} name={p.name} size={28}/><div><div style={{ fontWeight: 600 }}>{p.name}{me && <span className="muted" style={{ fontSize:11, marginLeft:6 }}>(you)</span>}</div></div></div></td>
+                <td className="muted">{p.city}</td>
+                <td className="num mono">{p.rating}</td>
+                <td className="num">{p.wins}–{p.losses}</td>
+                <td>{me ? <Chip tone="primary" dot>You</Chip> : challengeable ? <Chip tone="good">Challengeable</Chip> : <Chip>—</Chip>}</td>
+                <td>{challengeable && <Btn variant="ghost" size="sm" icon="flash">Challenge</Btn>}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </Card>
+  );
+};
+
+const RecentResults = ({ leagueId }: any) => {
+  const D = TL_DATA;
+  const [range, setRange] = useState('week');
+  const all = D.MATCHES.filter(m => m.status === 'completed' && (!leagueId || m.league === leagueId));
+  return (
+    <Card title="Recent results" action={
+      <PillGroup value={range} onChange={setRange} options={[
+        {value:'week', label:'This week'},
+        {value:'weekend', label:'Weekend'},
+        {value:'month', label:'Month'},
+      ]}/>
+    }>
+      {all.length === 0
+        ? <div className="muted" style={{ fontSize: 13 }}>No completed matches in this range.</div>
+        : <div style={{ display:'grid', gap: 8 }}>
+            {all.map(m => <MatchRow key={m.id} m={m} mineHighlight/>)}
+          </div>}
+    </Card>
+  );
+};
+
+const LeagueDetailPlayer = ({ navigate, id }: any) => {
+  const D = TL_DATA;
+  const l = D.LEAGUES.find(x => x.id === id) || D.LEAGUES[0];
   const [tab, setTab] = useState('standings');
+  const isLadder = (l.format || '').toLowerCase().includes('ladder');
+  const myMatches = D.MATCHES.filter(m => m.mine && m.league === l.id);
+  const allMatches = D.MATCHES.filter(m => m.league === l.id);
+
+  const tabs = [
+    isLadder ? { id:'ladder', label:'Ladder' } : { id:'standings', label:'Standings' },
+    { id:'recent', label:'Recent results', count: allMatches.filter(m => m.status==='completed').length },
+    { id:'mymatches', label:'My matches', count: myMatches.length },
+    { id:'allmatches', label:'All matches', count: allMatches.length },
+    { id:'rules', label:'Rules' },
+  ];
+  // ensure initial tab matches first tab id
+  useEffect(() => { setTab(tabs[0].id); /* eslint-disable-next-line */ }, [l.id]);
+
   return (
     <div className="page page--wide">
       <div className="card" style={{ overflow:'hidden', marginBottom: 24 }}>
         <PhotoBox src={l.cover} ratio="auto" style={{ height: 200, borderRadius: 0 }}>
           <div style={{ position:'absolute', inset:0, background:'linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.7))' }}/>
           <div style={{ position:'absolute', inset: 0, padding: 28, display:'flex', flexDirection:'column', justifyContent:'space-between', color:'white' }}>
-            <Chip tone="good" dot>You're #1 · 24 pts</Chip>
+            <div className="row" style={{ gap: 8 }}>
+              <Chip tone="good" dot>You're #4 · 22 pts</Chip>
+              <Chip tone="primary">{l.format}</Chip>
+              <Chip>{l.surface}</Chip>
+            </div>
             <div>
               <div className="display" style={{ fontSize: 40 }}>{l.name}</div>
               <div className="row" style={{ gap: 18, marginTop: 6, fontSize: 13, opacity: 0.9 }}>
-                <span>{l.org}</span><span>{l.players} players</span><span>Round 4 of 12</span>
+                <span>{l.org}</span><span>{l.players} players</span><span>{l.start} – {l.end}</span>
               </div>
             </div>
           </div>
         </PhotoBox>
-        <div className="row between" style={{ padding: 16 }}>
-          <Tabs active={tab} onChange={setTab} tabs={[
-            { id:'standings', label:'Standings' },
-            { id:'mymatches', label:'My matches', count: 3 },
-            { id:'allmatches', label:'All matches' },
-            { id:'rules', label:'Rules' },
-          ]}/>
+        <div className="row between" style={{ padding: 16, flexWrap:'wrap', gap: 12 }}>
+          <Tabs active={tab} onChange={setTab} tabs={tabs}/>
           <div className="row" style={{ gap: 8 }}>
             <Btn variant="ghost" size="sm" icon="bell">Subscribe</Btn>
             <Btn variant="primary" size="sm" icon="plus" onClick={()=>navigate('p_match_entry')}>Enter result</Btn>
@@ -312,14 +374,22 @@ const LeagueDetailPlayer = ({ navigate }) => {
       </div>
 
       {tab === 'standings' && <Standings/>}
+      {tab === 'ladder' && <Ladder/>}
+      {tab === 'recent' && <RecentResults leagueId={l.id}/>}
 
-      {tab === 'mymatches' && <div style={{ display:'grid', gap: 8 }}>
-        {D.MATCHES.filter(m => m.mine).map(m => <MatchRow key={m.id} m={m} onClick={()=>navigate('p_match_entry')}/>)}
-      </div>}
+      {tab === 'mymatches' && <Card title="My matches in this league">
+        {myMatches.length === 0
+          ? <div className="muted" style={{ fontSize: 13 }}>No matches yet.</div>
+          : <div style={{ display:'grid', gap: 8 }}>
+              {myMatches.map(m => <MatchRow key={m.id} m={m} onClick={()=>navigate('p_match_entry')}/>)}
+            </div>}
+      </Card>}
 
-      {tab === 'allmatches' && <div style={{ display:'grid', gap: 8 }}>
-        {D.MATCHES.map(m => <MatchRow key={m.id} m={m} mineHighlight={false}/>)}
-      </div>}
+      {tab === 'allmatches' && <Card title="All league matches" action={<Chip>{allMatches.length} total</Chip>}>
+        <div style={{ display:'grid', gap: 8 }}>
+          {allMatches.map(m => <MatchRow key={m.id} m={m} mineHighlight={false}/>)}
+        </div>
+      </Card>}
 
       {tab === 'rules' && <Card title="League rules">
         <div style={{ fontSize: 14, lineHeight: 1.7, color:'var(--ink-2)' }}>
@@ -334,9 +404,13 @@ const LeagueDetailPlayer = ({ navigate }) => {
   );
 };
 
-const TournamentDetailPlayer = ({ navigate }) => {
+const TournamentDetailPlayer = ({ navigate, id }: any) => {
   const D = TL_DATA;
-  const t = D.TOURNAMENTS[0];
+  const t = D.TOURNAMENTS.find(x => x.id === id) || D.TOURNAMENTS[0];
+  const [tab, setTab] = useState('bracket');
+  const myMatches = D.MATCHES.filter(m => m.mine).slice(0, 4);
+  const allMatches = D.MATCHES;
+
   return (
     <div className="page page--wide">
       <div className="card" style={{ overflow:'hidden', marginBottom: 24 }}>
@@ -352,24 +426,46 @@ const TournamentDetailPlayer = ({ navigate }) => {
             </div>
           </div>
         </PhotoBox>
-        <div className="row between" style={{ padding: 16 }}>
-          <div className="row" style={{ gap: 12, fontSize: 13 }}>
-            <Chip tone="primary">QF passed</Chip>
-            <Chip tone="warn" dot>SF Sat 14:00</Chip>
-            <Chip>Final Sun 16:00</Chip>
+        <div className="row between" style={{ padding: 16, flexWrap:'wrap', gap: 12 }}>
+          <Tabs active={tab} onChange={setTab} tabs={[
+            { id:'bracket', label:'Bracket' },
+            { id:'mymatches', label:'My matches', count: myMatches.length },
+            { id:'allmatches', label:'All matches', count: allMatches.length },
+            { id:'recent', label:'Recent results' },
+            { id:'info', label:'Info' },
+          ]}/>
+          <div className="row" style={{ gap: 8 }}>
+            <Btn variant="ghost" size="sm" iconRight="bracket" onClick={()=>navigate('p_tournament_bracket', { id: t.id })}>Open full bracket</Btn>
+            <Btn variant="primary" size="sm" icon="plus" onClick={()=>navigate('p_match_entry')}>Enter result</Btn>
           </div>
-          <Btn variant="primary" size="sm" iconRight="bracket" onClick={()=>navigate('p_tournament_bracket')}>Open bracket</Btn>
         </div>
       </div>
 
-      <Card title="Bracket — your path highlighted">
-        <Bracket data={D.BRACKET_8}/>
-      </Card>
-
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap: 16, marginTop: 16 }}>
-        <Card title="Your matches">
-          {D.MATCHES.filter(m => m.mine).slice(0,3).map(m => <MatchRow key={m.id} m={m}/>)}
+      {tab === 'bracket' && (
+        <Card title="Bracket — your path highlighted">
+          <Bracket data={D.BRACKET_8}/>
         </Card>
+      )}
+
+      {tab === 'mymatches' && (
+        <Card title="Your matches">
+          <div style={{ display:'grid', gap: 8 }}>
+            {myMatches.map(m => <MatchRow key={m.id} m={m} onClick={()=>navigate('p_match_entry')}/>)}
+          </div>
+        </Card>
+      )}
+
+      {tab === 'allmatches' && (
+        <Card title="All tournament matches" action={<Chip>{allMatches.length} total</Chip>}>
+          <div style={{ display:'grid', gap: 8 }}>
+            {allMatches.map(m => <MatchRow key={m.id} m={m} mineHighlight/>)}
+          </div>
+        </Card>
+      )}
+
+      {tab === 'recent' && <RecentResults/>}
+
+      {tab === 'info' && (
         <Card title="Tournament info">
           <div style={{ display:'grid', gap: 10, fontSize: 13 }}>
             <div className="row between"><span className="muted">Format</span><b>{t.format}</b></div>
@@ -380,7 +476,7 @@ const TournamentDetailPlayer = ({ navigate }) => {
             <div className="row between"><span className="muted">Court assignment</span><b>Court 1 (Centre)</b></div>
           </div>
         </Card>
-      </div>
+      )}
     </div>
   );
 };
