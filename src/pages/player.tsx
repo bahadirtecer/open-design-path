@@ -290,9 +290,25 @@ const orderForLeague = (id: string, n: number) => {
   return idx;
 };
 
+const EmptyState = ({ title, hint, onRetry }: any) => (
+  <div style={{ padding: '40px 20px', textAlign: 'center', display:'grid', gap: 10, placeItems:'center' }}>
+    <div style={{ width: 48, height: 48, borderRadius: '50%', background:'var(--bg-2)', display:'grid', placeItems:'center' }}>
+      <Icon name="flash" size={20}/>
+    </div>
+    <div style={{ fontWeight: 700, fontSize: 14 }}>{title}</div>
+    {hint && <div className="muted" style={{ fontSize: 12, maxWidth: 360 }}>{hint}</div>}
+    <Btn variant="soft" size="sm" icon="refresh" onClick={onRetry}>Try again</Btn>
+  </div>
+);
+
 const LeagueStandings = ({ league }: any) => {
   const D = TL_DATA;
-  const order = useMemo(() => orderForLeague(league?.id || 'l1', D.STANDINGS.length), [league?.id]);
+  const [nonce, setNonce] = useState(0);
+  const hasData = !!league?.id && Array.isArray(D.STANDINGS) && D.STANDINGS.length > 0;
+  const order = useMemo(
+    () => (hasData ? orderForLeague(league.id, D.STANDINGS.length) : []),
+    [league?.id, hasData, nonce]
+  );
   const rows = order.map((i, rank) => ({ ...D.STANDINGS[i], rank }));
   const [sort, setSort] = useState('pts');
   return (
@@ -300,66 +316,87 @@ const LeagueStandings = ({ league }: any) => {
       <Btn variant="soft" size="sm" icon="filter">Filter</Btn>
       <Btn variant="soft" size="sm" icon="download">Export</Btn>
     </>}>
-      <div style={{ overflow:'auto' }}>
-        <table className="tbl">
-          <thead><tr>
-            <th>#</th><th>Player</th><th>City</th>
-            {[['played','MP'],['wins','W'],['losses','L'],['sets_w','SW'],['sets_l','SL'],['pts','PTS']].map(([k,l]) => (
-              <th key={k} style={{ cursor:'pointer' }} onClick={()=>setSort(k)}>{l} {sort===k && '↓'}</th>
-            ))}
-            <th>Form</th>
-          </tr></thead>
-          <tbody>
-            {rows.map((p, i) => {
-              const me = i === 3;
-              return (
-                <tr key={p.id} style={me ? { background:'color-mix(in srgb, var(--primary) 8%, transparent)' } : {}}>
-                  <td><span className="rank">{i+1}</span></td>
-                  <td><div className="row" style={{ gap: 10 }}><Avatar src={p.avatar} name={p.name} size={28}/><div><div style={{ fontWeight: 600 }}>{p.name}{me && <span className="muted" style={{ fontSize:11, marginLeft:6 }}>(you)</span>}</div><div className="muted mono" style={{ fontSize: 10 }}>#{p.rating}</div></div></div></td>
-                  <td className="muted">{p.city}</td>
-                  <td className="num">{p.played}</td>
-                  <td className="num">{p.wins}</td>
-                  <td className="num">{p.losses}</td>
-                  <td className="num">{p.sets_w}</td>
-                  <td className="num">{p.sets_l}</td>
-                  <td className="num"><b style={{ fontSize: 14 }}>{p.pts}</b></td>
-                  <td><div className="row" style={{ gap: 2 }}>{['W','W','L','W','W'].map((r, j) => <span key={j} className="mono" style={{ width: 14, height: 14, fontSize: 9, display:'grid', placeItems:'center', borderRadius: 3, background: r==='W'?'var(--good)':'var(--bad)', color:'white', fontWeight: 700 }}>{r}</span>)}</div></td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+      {!hasData ? (
+        <EmptyState
+          title="No standings yet"
+          hint="This league hasn't generated a standings table yet. Once matches are played, results will appear here."
+          onRetry={() => setNonce(n => n + 1)}
+        />
+      ) : (
+        <div style={{ overflow:'auto' }}>
+          <table className="tbl">
+            <thead><tr>
+              <th>#</th><th>Player</th><th>City</th>
+              {[['played','MP'],['wins','W'],['losses','L'],['sets_w','SW'],['sets_l','SL'],['pts','PTS']].map(([k,l]) => (
+                <th key={k} style={{ cursor:'pointer' }} onClick={()=>setSort(k)}>{l} {sort===k && '↓'}</th>
+              ))}
+              <th>Form</th>
+            </tr></thead>
+            <tbody>
+              {rows.map((p, i) => {
+                const me = i === 3;
+                return (
+                  <tr key={p.id} style={me ? { background:'color-mix(in srgb, var(--primary) 8%, transparent)' } : {}}>
+                    <td><span className="rank">{i+1}</span></td>
+                    <td><div className="row" style={{ gap: 10 }}><Avatar src={p.avatar} name={p.name} size={28}/><div><div style={{ fontWeight: 600 }}>{p.name}{me && <span className="muted" style={{ fontSize:11, marginLeft:6 }}>(you)</span>}</div><div className="muted mono" style={{ fontSize: 10 }}>#{p.rating}</div></div></div></td>
+                    <td className="muted">{p.city}</td>
+                    <td className="num">{p.played}</td>
+                    <td className="num">{p.wins}</td>
+                    <td className="num">{p.losses}</td>
+                    <td className="num">{p.sets_w}</td>
+                    <td className="num">{p.sets_l}</td>
+                    <td className="num"><b style={{ fontSize: 14 }}>{p.pts}</b></td>
+                    <td><div className="row" style={{ gap: 2 }}>{['W','W','L','W','W'].map((r, j) => <span key={j} className="mono" style={{ width: 14, height: 14, fontSize: 9, display:'grid', placeItems:'center', borderRadius: 3, background: r==='W'?'var(--good)':'var(--bad)', color:'white', fontWeight: 700 }}>{r}</span>)}</div></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </Card>
   );
 };
 
 const Ladder = ({ league }: any) => {
   const D = TL_DATA;
-  const order = useMemo(() => orderForLeague(league?.id || 'l2', D.STANDINGS.length), [league?.id]);
+  const [nonce, setNonce] = useState(0);
+  const hasData = !!league?.id && Array.isArray(D.STANDINGS) && D.STANDINGS.length > 0;
+  const order = useMemo(
+    () => (hasData ? orderForLeague(league.id, D.STANDINGS.length) : []),
+    [league?.id, hasData, nonce]
+  );
   const rows = order.map(i => D.STANDINGS[i]);
   return (
     <Card title={`Ladder · ${league?.name || ''}`} pad={false} action={<Btn variant="soft" size="sm" icon="flash">Challenge a player</Btn>}>
-      <table className="tbl">
-        <thead><tr><th>Rank</th><th>Player</th><th>City</th><th className="num">Rating</th><th className="num">W–L</th><th>Status</th><th></th></tr></thead>
-        <tbody>
-          {rows.map((p, i) => {
-            const me = i === 3;
-            const challengeable = Math.abs(i - 3) <= 4 && !me;
-            return (
-              <tr key={p.id} style={me ? { background:'color-mix(in srgb, var(--primary) 8%, transparent)' } : {}}>
-                <td><span className="rank">{i+1}</span></td>
-                <td><div className="row" style={{ gap: 10 }}><Avatar src={p.avatar} name={p.name} size={28}/><div><div style={{ fontWeight: 600 }}>{p.name}{me && <span className="muted" style={{ fontSize:11, marginLeft:6 }}>(you)</span>}</div></div></div></td>
-                <td className="muted">{p.city}</td>
-                <td className="num mono">{p.rating}</td>
-                <td className="num">{p.wins}–{p.losses}</td>
-                <td>{me ? <Chip tone="primary" dot>You</Chip> : challengeable ? <Chip tone="good">Challengeable</Chip> : <Chip>—</Chip>}</td>
-                <td>{challengeable && <Btn variant="ghost" size="sm" icon="flash">Challenge</Btn>}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      {!hasData ? (
+        <EmptyState
+          title="Ladder not ready"
+          hint="No ranked players found for this ladder yet. Check back after the first challenges are played."
+          onRetry={() => setNonce(n => n + 1)}
+        />
+      ) : (
+        <table className="tbl">
+          <thead><tr><th>Rank</th><th>Player</th><th>City</th><th className="num">Rating</th><th className="num">W–L</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            {rows.map((p, i) => {
+              const me = i === 3;
+              const challengeable = Math.abs(i - 3) <= 4 && !me;
+              return (
+                <tr key={p.id} style={me ? { background:'color-mix(in srgb, var(--primary) 8%, transparent)' } : {}}>
+                  <td><span className="rank">{i+1}</span></td>
+                  <td><div className="row" style={{ gap: 10 }}><Avatar src={p.avatar} name={p.name} size={28}/><div><div style={{ fontWeight: 600 }}>{p.name}{me && <span className="muted" style={{ fontSize:11, marginLeft:6 }}>(you)</span>}</div></div></div></td>
+                  <td className="muted">{p.city}</td>
+                  <td className="num mono">{p.rating}</td>
+                  <td className="num">{p.wins}–{p.losses}</td>
+                  <td>{me ? <Chip tone="primary" dot>You</Chip> : challengeable ? <Chip tone="good">Challengeable</Chip> : <Chip>—</Chip>}</td>
+                  <td>{challengeable && <Btn variant="ghost" size="sm" icon="flash">Challenge</Btn>}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
     </Card>
   );
 };
