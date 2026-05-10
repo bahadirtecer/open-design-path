@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { createFileRoute } from '@tanstack/react-router';
-import { BrowseLeagues } from '@/pages/player';
+import { BrowseLeagues } from '@/pages/misc';
 import { useCzNavigate } from '@/lib/use-cz-navigate';
 
 export const Route = createFileRoute('/_app/leagues/')({ component: Page });
