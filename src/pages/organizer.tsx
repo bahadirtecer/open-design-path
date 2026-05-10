@@ -547,7 +547,7 @@ const CreateTournament = ({ navigate }) => {
           </Field>
           <div className="row" style={{ marginTop: 8, gap: 8, justifyContent:'flex-end' }}>
             <Btn variant="ghost" onClick={()=>navigate('o_dashboard')}>Save draft</Btn>
-            <Btn variant="primary" iconRight="check" onClick={()=>navigate('o_tournament')}>Publish & open registration</Btn>
+            <Btn variant="primary" iconRight="check" disabled={disciplineMissing} onClick={()=>!disciplineMissing && navigate('o_tournament')}>Publish & open registration</Btn>
           </div>
         </div>
       </Card>
