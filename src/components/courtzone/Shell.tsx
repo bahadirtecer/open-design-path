@@ -10,13 +10,13 @@ const NAV: any[] = [
   { id: 'p_matches', label: 'Match history', icon: 'flash', role: 'all' },
   { id: 'p_browse_l', label: 'Browse leagues', icon: 'flag', role: 'all', count: 14 },
   { id: 'p_browse_t', label: 'Browse tournaments', icon: 'bracket', role: 'all', count: 8 },
-  { section: 'Organize', role: 'organizer' },
-  { id: 'o_dashboard', label: 'Organizer hub', icon: 'shield', role: 'organizer' },
-  { id: 'o_create_l', label: 'Create league', icon: 'plus', role: 'organizer' },
-  { id: 'o_create_t', label: 'Create tournament', icon: 'plus', role: 'organizer' },
-  { id: 'o_league', label: 'League: Warszawa Open', icon: 'flag', role: 'organizer' },
-  { id: 'o_tournament', label: 'Cup: Mazovia Spring', icon: 'bracket', role: 'organizer' },
-  { id: 'o_match_l', label: 'Match management', icon: 'court', role: 'organizer' },
+  { section: 'Organize' },
+  { id: 'o_dashboard', label: 'Organizer hub', icon: 'shield', role: 'all' },
+  { id: 'o_create_l', label: 'Create league', icon: 'plus', role: 'all' },
+  { id: 'o_create_t', label: 'Create tournament', icon: 'plus', role: 'all' },
+  { id: 'o_league', label: 'League: Warszawa Open', icon: 'flag', role: 'all' },
+  { id: 'o_tournament', label: 'Cup: Mazovia Spring', icon: 'bracket', role: 'all' },
+  { id: 'o_match_l', label: 'Match management', icon: 'court', role: 'all' },
   { section: 'Admin', role: 'admin' },
   { id: 'a_dashboard', label: 'Platform overview', icon: 'chart', role: 'admin' },
   { id: 'a_users', label: 'User management', icon: 'users', role: 'admin' },
@@ -33,8 +33,8 @@ export const Sidebar = ({ activeId, navigate, role }: any) => {
   const visible = NAV.filter((item) => {
     if (item.section) return !item.role || item.role === role || role === 'admin';
     if (role === 'admin') return true;
-    if (role === 'organizer') return item.role !== 'admin';
-    return item.role !== 'admin' && item.role !== 'organizer';
+    // Player can access everything except admin-only items.
+    return item.role !== 'admin';
   });
   return (
     <aside className="sidebar">
@@ -55,7 +55,7 @@ export const Sidebar = ({ activeId, navigate, role }: any) => {
         <Avatar src={PLAYERS[0].avatar} name={PLAYERS[0].name} size={32} />
         <div className="grow">
           <div className="uname">{PLAYERS[0].name}</div>
-          <div className="urole">{role === 'admin' ? 'Super admin' : role === 'organizer' ? 'Organizer · Player' : 'Player · #1842'}</div>
+          <div className="urole">{role === 'admin' ? 'Super admin' : 'Player · #1842'}</div>
         </div>
         <Icon name="settings" size={14} className="muted" />
       </div>

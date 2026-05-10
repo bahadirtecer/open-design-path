@@ -41,7 +41,7 @@ function AppLayout() {
       <div className="main">
         <Topbar
           title={label}
-          sub={t.role === 'admin' ? 'Super admin · CourtZone HQ' : t.role === 'organizer' ? 'Organizer · Warszawa Tennis Club' : 'Player · Warszawa'}
+          sub={t.role === 'admin' ? 'Super admin · CourtZone HQ' : 'Player · Warszawa'}
           navigate={navigate}
           right={
             <button className="btn btn-ghost btn-sm" onClick={() => navigate('public_landing')}>

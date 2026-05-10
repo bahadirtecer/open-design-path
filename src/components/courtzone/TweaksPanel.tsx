@@ -41,7 +41,6 @@ const SECTIONS = [
     label: 'Role',
     options: [
       { v: 'player', l: 'Player' },
-      { v: 'organizer', l: 'Organizer' },
       { v: 'admin', l: 'Admin' },
     ],
   },
