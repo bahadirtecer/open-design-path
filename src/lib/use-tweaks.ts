@@ -26,7 +26,12 @@ export function useTweaks() {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(KEY);
-      if (raw) setT({ ...DEFAULTS, ...JSON.parse(raw) });
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        // Migrate legacy 'organizer' role → 'player' (organizer role removed).
+        if (parsed.role === 'organizer') parsed.role = 'player';
+        setT({ ...DEFAULTS, ...parsed });
+      }
     } catch {}
   }, []);
 
