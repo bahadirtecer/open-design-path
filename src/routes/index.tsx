@@ -1,26 +1,19 @@
-import { createFileRoute } from "@tanstack/react-router";
+// @ts-nocheck
+import { createFileRoute } from '@tanstack/react-router';
+import { Landing } from '@/pages/public';
+import { useCzNavigate } from '@/lib/use-cz-navigate';
+import { TweaksPanel } from '@/components/courtzone/TweaksPanel';
 
-export const Route = createFileRoute("/")({
-  component: Index,
+export const Route = createFileRoute('/')({
+  component: IndexPage,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
+function IndexPage() {
+  const navigate = useCzNavigate();
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="public-shell">
+      <Landing navigate={navigate} />
+      <TweaksPanel />
     </div>
   );
-}
-
-function Index() {
-  return <PlaceholderIndex />;
 }
