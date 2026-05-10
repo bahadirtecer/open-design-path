@@ -14,14 +14,14 @@ export type Tweaks = {
 
 const DEFAULTS: Tweaks = {
   theme: '',
-  aesthetic: '',
-  density: 'comfortable',
+  aesthetic: 'neo',
+  density: 'compact',
   bracket: 'horizontal',
   role: 'player',
   organizing: 'active',
 };
 
-const KEY = 'cz_tweaks_v2';
+const KEY = 'cz_tweaks_v3';
 
 function load(): Tweaks {
   if (typeof localStorage === 'undefined') return DEFAULTS;
