@@ -753,7 +753,7 @@ const MyProfile = ({ navigate }) => {
                 <select className="select" defaultValue="female">
                   <option value="female">Female</option>
                   <option value="male">Male</option>
-                  <option value="other">Prefer not to say</option>
+                  
                 </select>
               </Field>
               <Field label="Date of birth"><input className="input" type="date" defaultValue="1995-04-22"/></Field>
