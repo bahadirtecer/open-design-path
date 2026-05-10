@@ -636,12 +636,25 @@ const MatchResultEntry = ({ navigate }) => {
         </div>
 
         <div style={{ marginTop: 18, display:'grid', gap: 14 }}>
-          <Field label="Match duration"><input className="input" defaultValue="1h 47min"/></Field>
+          <Field label="Match duration">
+            <div className="row" style={{ gap: 8 }}>
+              <select className="select" defaultValue="1" style={{ flex: 1 }}>
+                {Array.from({ length: 6 }, (_, i) => (
+                  <option key={i} value={i}>{i} h</option>
+                ))}
+              </select>
+              <select className="select" defaultValue="47" style={{ flex: 1 }}>
+                {Array.from({ length: 12 }, (_, i) => i * 5).map(m => (
+                  <option key={m} value={m}>{m.toString().padStart(2,'0')} min</option>
+                ))}
+              </select>
+            </div>
+          </Field>
           <Field label="Court"><select className="select" defaultValue="2"><option>Court 1</option><option value="2">Court 2</option><option>Court 3</option></select></Field>
-          <Field label="Notes (optional)"><textarea className="textarea" rows="2" placeholder="e.g. Light rain in set 2, paused 8 min."/></Field>
 
-          <div style={{ background:'color-mix(in srgb, var(--good) 8%, transparent)', borderRadius: 10, padding: 14, fontSize: 13, color: 'var(--good)' }}>
-            <Icon name="check" size={14}/> <b>Match summary:</b> 6-4, 3-6, 7-5 — Iga Górski wins
+          <div style={{ background:'color-mix(in srgb, var(--good) 8%, transparent)', borderRadius: 10, padding: '16px 18px', fontSize: 16, fontWeight: 600, color: 'var(--good)', display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'nowrap', whiteSpace: 'nowrap' }}>
+            <Icon name="check" size={20}/>
+            <span><b>Match summary:</b> 6-4, 3-6, 7-5 — Iga Górski wins</span>
           </div>
         </div>
 
