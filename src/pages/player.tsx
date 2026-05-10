@@ -590,8 +590,18 @@ const MatchResultEntry = ({ navigate }) => {
     setScores(scores.map((s, i) => (i === idx ? (side === 0 ? [v, s[1]] : [s[0], v]) : s)));
   const removeSet = (idx) => setScores(scores.filter((_, i) => i !== idx));
   const addSet = () => scores.length < maxSets && setScores([...scores, [0, 0]]);
+  const [submitted, setSubmitted] = useState(false);
   const surfaceKey = (m.surface || 'Clay').toLowerCase();
   const courtLabel = `${m.surface || 'Clay'} · ${m.court || 'Court 2'}`;
+  const shareText = `Just won my match ${scores.map(p => p.join('-')).join(', ')} at ${m.leagueName}! 🎾🏆 #CourtZone`;
+  const shareUrl = typeof window !== 'undefined' ? window.location.origin : 'https://courtzone.app';
+  const enc = encodeURIComponent;
+  const shareLinks = [
+    { name: 'X', icon: 'twitter', href: `https://twitter.com/intent/tweet?text=${enc(shareText)}&url=${enc(shareUrl)}` },
+    { name: 'Facebook', icon: 'facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${enc(shareUrl)}&quote=${enc(shareText)}` },
+    { name: 'WhatsApp', icon: 'message-circle', href: `https://wa.me/?text=${enc(shareText + ' ' + shareUrl)}` },
+    { name: 'LinkedIn', icon: 'linkedin', href: `https://www.linkedin.com/sharing/share-offsite/?url=${enc(shareUrl)}` },
+  ];
   return (
     <div className="page page--narrow">
       <PageHeader eyebrow={`${m.leagueName} · ${m.round} · ${m.surface || 'Clay'}`} title="Enter match result." sub="Your opponent will get a notification to confirm. Both must agree before standings update."/>
