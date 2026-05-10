@@ -711,6 +711,7 @@ const MyProfile = ({ navigate }) => {
   });
   React.useEffect(() => { localStorage.setItem('cz_partner', JSON.stringify(partner)); }, [partner]);
   const [pickerOpen, setPickerOpen] = React.useState(false);
+  const [partnerQuery, setPartnerQuery] = React.useState('');
   const candidates = TL_DATA.PLAYERS.slice(1, 8);
   return (
     <div className="page page--wide">
