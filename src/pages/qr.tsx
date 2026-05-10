@@ -17,6 +17,7 @@ const QRScanner = ({ navigate }) => {
   const [code, setCode] = useState('');
   const [scanning, setScanning] = useState(true);
   const [scanned, setScanned] = useState(false);
+  const [memberStatus, setMemberStatus] = useState(null); // null | 'member' | 'guest'
   const D = TL_DATA;
   const orgName = 'Warszawa Tennis Club';
   const orgComps = [
@@ -28,6 +29,7 @@ const QRScanner = ({ navigate }) => {
     setScanning(false);
     setScanned(true);
     setCode('WTC-2026');
+    setMemberStatus(null);
   };
 
   return (
@@ -94,31 +96,50 @@ const QRScanner = ({ navigate }) => {
               </div>
               <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>Code <span className="mono"><b>{code}</b></span> · 248 members · ul. Polna 14, Warszawa</div>
             </div>
-            <Btn variant="ghost" size="sm" icon="qr" onClick={()=>{ setScanned(false); setScanning(true); setCode(''); }}>Scan again</Btn>
+            <Btn variant="ghost" size="sm" icon="qr" onClick={()=>{ setScanned(false); setScanning(true); setCode(''); setMemberStatus(null); }}>Scan again</Btn>
           </div>
 
-          <h3 className="h3" style={{ margin: '4px 0 12px' }}>Open competitions ({orgComps.length})</h3>
-          <div className="card" style={{ padding: 0 }}>
-            {orgComps.map((c, i) => (
-              <div key={c.id} className="row" style={{ gap: 14, padding: 16, borderTop: i?'1px solid var(--line)':'none', alignItems:'center' }}>
-                <div className="photo" style={{ width: 56, height: 56, backgroundImage:`url(${c.cover})`, backgroundSize:'cover', borderRadius: 10, flexShrink: 0 }}/>
-                <div className="grow" style={{ minWidth: 0 }}>
-                  <div className="row" style={{ gap: 8, alignItems:'center', flexWrap:'wrap' }}>
-                    <div style={{ fontWeight: 700, fontSize: 14 }}>{c.name}</div>
-                    <Chip tone={c.kind==='tournament'?'accent':'primary'}>{c.kind === 'tournament' ? 'Cup' : 'League'}</Chip>
-                  </div>
-                  <div className="muted row" style={{ gap: 12, fontSize: 12, marginTop: 4, flexWrap:'wrap' }}>
-                    <span>{c.format}</span>
-                    <span>{c.surface}</span>
-                    <span>{c.kind==='tournament' ? c.date : `${c.start} – ${c.end}`}</span>
-                    <span>{c.players} players</span>
-                    {c.fee && <span>{c.fee}</span>}
-                  </div>
-                </div>
-                <Btn variant="primary" size="sm" iconRight="check" onClick={()=>navigate('qr_confirm')}>Register</Btn>
+          {memberStatus === null && (
+            <div className="card" style={{ padding: 22, marginBottom: 16, textAlign:'center' }}>
+              <div className="eyebrow">One quick check</div>
+              <div className="h3" style={{ margin:'6px 0 4px' }}>Do you already have a CourtZone account?</div>
+              <div className="muted" style={{ fontSize: 13, marginBottom: 16 }}>
+                We use your account to track results, notify opponents, and protect your spot. New players sign up once — it takes about 30 seconds.
               </div>
-            ))}
-          </div>
+              <div className="row" style={{ gap: 10, justifyContent:'center', flexWrap:'wrap' }}>
+                <Btn variant="ghost" icon="user" onClick={()=>navigate('public_signup')}>I'm new · Sign up</Btn>
+                <Btn variant="primary" iconRight="arrow_right" onClick={()=>setMemberStatus('member')}>Yes, I'm a member</Btn>
+              </div>
+              <div className="muted" style={{ fontSize: 11, marginTop: 14 }}>
+                Already signed in as <b>Iga Górski</b>? Tap "Yes" to continue.
+              </div>
+            </div>
+          )}
+
+          {memberStatus === 'member' && <>
+            <h3 className="h3" style={{ margin: '4px 0 12px' }}>Open competitions ({orgComps.length})</h3>
+            <div className="card" style={{ padding: 0 }}>
+              {orgComps.map((c, i) => (
+                <div key={c.id} className="row" style={{ gap: 14, padding: 16, borderTop: i?'1px solid var(--line)':'none', alignItems:'center' }}>
+                  <div className="photo" style={{ width: 56, height: 56, backgroundImage:`url(${c.cover})`, backgroundSize:'cover', borderRadius: 10, flexShrink: 0 }}/>
+                  <div className="grow" style={{ minWidth: 0 }}>
+                    <div className="row" style={{ gap: 8, alignItems:'center', flexWrap:'wrap' }}>
+                      <div style={{ fontWeight: 700, fontSize: 14 }}>{c.name}</div>
+                      <Chip tone={c.kind==='tournament'?'accent':'primary'}>{c.kind === 'tournament' ? 'Cup' : 'League'}</Chip>
+                    </div>
+                    <div className="muted row" style={{ gap: 12, fontSize: 12, marginTop: 4, flexWrap:'wrap' }}>
+                      <span>{c.format}</span>
+                      <span>{c.surface}</span>
+                      <span>{c.kind==='tournament' ? c.date : `${c.start} – ${c.end}`}</span>
+                      <span>{c.players} players</span>
+                      {c.fee && <span>{c.fee}</span>}
+                    </div>
+                  </div>
+                  <Btn variant="primary" size="sm" iconRight="check" onClick={()=>navigate('qr_confirm')}>Register</Btn>
+                </div>
+              ))}
+            </div>
+          </>}
 
           <div className="muted" style={{ marginTop: 16, fontSize: 12, textAlign:'center' }}>
             Don't see what you're looking for? <u style={{ cursor:'pointer' }} onClick={()=>{ setScanned(false); setScanning(true); setCode(''); }}>Scan a different code</u> or browse all competitions.
