@@ -16,6 +16,7 @@ const NAV: any[] = [
   { section: 'Admin', role: 'admin' },
   { id: 'a_dashboard', label: 'Platform overview', icon: 'chart', role: 'admin' },
   { id: 'a_users', label: 'User management', icon: 'users', role: 'admin' },
+  { id: 'a_facilities', label: 'Facilities', icon: 'pin', role: 'admin' },
   { id: 'a_orgs', label: 'Organizations', icon: 'shield', role: 'admin' },
   { id: 'a_reports', label: 'Reports', icon: 'chart', role: 'admin' },
   { section: 'Account' },
