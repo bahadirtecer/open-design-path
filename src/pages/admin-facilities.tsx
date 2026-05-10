@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { useMemo, useState } from 'react';
 import { Icon } from '@/lib/icons';
-import { Btn, Card } from '@/components/courtzone/atoms';
+import { Btn, Card, PageHeader } from '@/components/courtzone/atoms';
 import { useFacilities, type Facility } from '@/lib/use-facilities';
 import { FacilityModal } from '@/components/courtzone/FacilityPicker';
 
@@ -105,17 +105,15 @@ export const AdminFacilities = () => {
   const active = all.find((f) => f.id === activeId);
 
   return (
-    <div style={{ display:'grid', gap:16 }}>
-      <div className="row" style={{ justifyContent:'space-between', alignItems:'flex-end' }}>
-        <div>
-          <div className="eyebrow">Admin · Facilities</div>
-          <h1 style={{ margin:'4px 0 0', fontSize:24 }}>Facility management</h1>
-          <div className="muted" style={{ fontSize:12, marginTop:2 }}>
-            Every court & venue on the platform. Admin-owned facilities can be published as shared.
-          </div>
-        </div>
-        <Btn variant="primary" icon="plus" onClick={() => setModal(true)}>New facility</Btn>
-      </div>
+    <div className="page page--wide">
+      <PageHeader
+        eyebrow="Admin · Facilities"
+        title={`${stats.total} facilities on the platform.`}
+        sub="Every court & venue on the map. Admin-owned facilities can be published as shared."
+        action={<Btn variant="primary" icon="plus" onClick={() => setModal(true)}>New facility</Btn>}
+      />
+
+      <div style={{ display:'grid', gap:16 }}>
 
       <div style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:12 }}>
         <Stat label="Total facilities" value={stats.total} icon="court" hint="Owned by admins + players"/>
@@ -193,6 +191,7 @@ export const AdminFacilities = () => {
       </Card>
 
       {modal && <FacilityModal onClose={() => setModal(false)} onCreated={(f) => setActiveId(f.id)}/>}
+      </div>
     </div>
   );
 };
