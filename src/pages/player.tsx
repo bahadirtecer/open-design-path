@@ -303,7 +303,7 @@ const MyProfile = ({ navigate }) => {
               </div>
               <div>
                 <div className="h2">{me.name}</div>
-                <div className="muted">@{me.handle} · {me.city}</div>
+                <div className="muted">{me.city}</div>
               </div>
               <div className="row" style={{ gap: 8 }}>
                 <Chip tone="primary">Player</Chip>
