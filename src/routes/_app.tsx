@@ -22,7 +22,7 @@ const ID_TO_LABEL: Record<string, string> = {
   o_create_l: 'Create league', o_create_t: 'Create tournament',
   o_match_l: 'Match management',
   u_profile: 'My profile', u_notifications: 'Notifications', u_messages: 'Inbox',
-  u_qr: 'QR scanner', a_users: 'User management', a_orgs: 'Organizations', a_reports: 'Reports',
+  u_qr: 'QR scanner', a_users: 'User management', a_orgs: 'Organizations', a_facilities: 'Facility management', a_reports: 'Reports',
 };
 
 export const Route = createFileRoute('/_app')({
