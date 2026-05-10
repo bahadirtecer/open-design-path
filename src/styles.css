@@ -1106,9 +1106,20 @@ body[data-theme="vercel"] .public-shell > nav { background-color: color-mix(in s
 .set-scores-court .btn-ghost { background: rgba(255,255,255,0.92); border-color: rgba(255,255,255,0.7); }
 .set-scores-court .muted { color: rgba(255,255,255,0.85); }
 
-.set-scores-court .eyebrow,
-.set-scores-court .surface-tag { color: #3b4350 !important; text-shadow: none !important; }
-.set-scores-court .surface-tag::before { background: var(--surface-color, #3b4350) !important; }
-.set-scores-court .mono.muted { color: #4b5563 !important; text-shadow: none !important; font-weight: 600; }
-.set-scores-court .btn-ghost { background: #ffffff !important; border-color: var(--line) !important; color: var(--ink) !important; }
-.set-scores-court .btn-ghost:hover { background: #fafafa !important; }
+.set-scores-court[data-surface="clay"] .eyebrow,
+.set-scores-court[data-surface="clay"] .surface-tag,
+.set-scores-court[data-surface="clay"] .mono.muted {
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.45) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em;
+}
+.set-scores-court[data-surface="clay"] .eyebrow { font-size: 14px !important; }
+.set-scores-court[data-surface="clay"] .surface-tag { font-size: 12px !important; }
+.set-scores-court[data-surface="clay"] .mono.muted { font-size: 13px !important; }
+.set-scores-court[data-surface="clay"] .surface-tag::before { background: #ffffff !important; }
+
+.set-scores-court .btn-ghost { background: #ffffff !important; border-color: var(--line) !important; color: #000000 !important; }
+.set-scores-court .btn-ghost:hover { background: #fafafa !important; color: #000000 !important; }
+.set-scores-court .input { color: #000000 !important; font-weight: 700 !important; }
+
