@@ -9,7 +9,7 @@ import {
 } from '@/components/courtzone/atoms';
 import { TL_DATA } from '@/lib/mock-data';
 import { LiveBadge, ViewerBadge, FeaturedLive } from './live';
-import { Standings } from './organizer';
+
 
 // Player pages 20-26: My competitions, League player view, Tournament player view,
 // Match result entry, Match history, My profile, Public profile
@@ -278,14 +278,72 @@ const AwaitingOpponentRow = ({ r }: any) => (
   </div>
 );
 
-const Ladder = () => {
+// Stable per-league reordering so each joined league shows its own table
+const orderForLeague = (id: string, n: number) => {
+  let h = 0; for (const c of String(id || '')) h = (h * 31 + c.charCodeAt(0)) % 9973;
+  const idx = Array.from({ length: n }, (_, i) => i);
+  for (let i = n - 1; i > 0; i--) {
+    h = (h * 9301 + 49297) % 233280;
+    const j = h % (i + 1);
+    [idx[i], idx[j]] = [idx[j], idx[i]];
+  }
+  return idx;
+};
+
+const LeagueStandings = ({ league }: any) => {
   const D = TL_DATA;
+  const order = useMemo(() => orderForLeague(league?.id || 'l1', D.STANDINGS.length), [league?.id]);
+  const rows = order.map((i, rank) => ({ ...D.STANDINGS[i], rank }));
+  const [sort, setSort] = useState('pts');
   return (
-    <Card title="Ladder" pad={false} action={<Btn variant="soft" size="sm" icon="flash">Challenge a player</Btn>}>
+    <Card title={`Standings · ${league?.name || ''}`} pad={false} action={<>
+      <Btn variant="soft" size="sm" icon="filter">Filter</Btn>
+      <Btn variant="soft" size="sm" icon="download">Export</Btn>
+    </>}>
+      <div style={{ overflow:'auto' }}>
+        <table className="tbl">
+          <thead><tr>
+            <th>#</th><th>Player</th><th>City</th>
+            {[['played','MP'],['wins','W'],['losses','L'],['sets_w','SW'],['sets_l','SL'],['pts','PTS']].map(([k,l]) => (
+              <th key={k} style={{ cursor:'pointer' }} onClick={()=>setSort(k)}>{l} {sort===k && '↓'}</th>
+            ))}
+            <th>Form</th>
+          </tr></thead>
+          <tbody>
+            {rows.map((p, i) => {
+              const me = i === 3;
+              return (
+                <tr key={p.id} style={me ? { background:'color-mix(in srgb, var(--primary) 8%, transparent)' } : {}}>
+                  <td><span className="rank">{i+1}</span></td>
+                  <td><div className="row" style={{ gap: 10 }}><Avatar src={p.avatar} name={p.name} size={28}/><div><div style={{ fontWeight: 600 }}>{p.name}{me && <span className="muted" style={{ fontSize:11, marginLeft:6 }}>(you)</span>}</div><div className="muted mono" style={{ fontSize: 10 }}>#{p.rating}</div></div></div></td>
+                  <td className="muted">{p.city}</td>
+                  <td className="num">{p.played}</td>
+                  <td className="num">{p.wins}</td>
+                  <td className="num">{p.losses}</td>
+                  <td className="num">{p.sets_w}</td>
+                  <td className="num">{p.sets_l}</td>
+                  <td className="num"><b style={{ fontSize: 14 }}>{p.pts}</b></td>
+                  <td><div className="row" style={{ gap: 2 }}>{['W','W','L','W','W'].map((r, j) => <span key={j} className="mono" style={{ width: 14, height: 14, fontSize: 9, display:'grid', placeItems:'center', borderRadius: 3, background: r==='W'?'var(--good)':'var(--bad)', color:'white', fontWeight: 700 }}>{r}</span>)}</div></td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </Card>
+  );
+};
+
+const Ladder = ({ league }: any) => {
+  const D = TL_DATA;
+  const order = useMemo(() => orderForLeague(league?.id || 'l2', D.STANDINGS.length), [league?.id]);
+  const rows = order.map(i => D.STANDINGS[i]);
+  return (
+    <Card title={`Ladder · ${league?.name || ''}`} pad={false} action={<Btn variant="soft" size="sm" icon="flash">Challenge a player</Btn>}>
       <table className="tbl">
         <thead><tr><th>Rank</th><th>Player</th><th>City</th><th className="num">Rating</th><th className="num">W–L</th><th>Status</th><th></th></tr></thead>
         <tbody>
-          {D.STANDINGS.map((p, i) => {
+          {rows.map((p, i) => {
             const me = i === 3;
             const challengeable = Math.abs(i - 3) <= 4 && !me;
             return (
@@ -373,8 +431,8 @@ const LeagueDetailPlayer = ({ navigate, id }: any) => {
         </div>
       </div>
 
-      {tab === 'standings' && <Standings/>}
-      {tab === 'ladder' && <Ladder/>}
+      {tab === 'standings' && <LeagueStandings league={l}/>}
+      {tab === 'ladder' && <Ladder league={l}/>}
       {tab === 'recent' && <RecentResults leagueId={l.id}/>}
 
       {tab === 'mymatches' && <Card title="My matches in this league">
@@ -442,7 +500,7 @@ const TournamentDetailPlayer = ({ navigate, id }: any) => {
       </div>
 
       {tab === 'bracket' && (
-        <Card title="Bracket — your path highlighted">
+        <Card title={`Bracket · ${t.name} — your path highlighted`}>
           <Bracket data={D.BRACKET_8}/>
         </Card>
       )}
