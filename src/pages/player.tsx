@@ -689,16 +689,16 @@ const MatchResultEntry = ({ navigate }) => {
             <div className="muted" style={{ fontSize: 13, marginBottom: 14 }}>{m.p2.name} has been notified. Share your win with the world:</div>
             <div className="row" style={{ gap: 8, flexWrap: 'wrap' }}>
               {shareLinks.map(s => (
-                <a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer" className="btn btn-soft" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, textDecoration: 'none' }}>
-                  <Icon name={s.icon} size={14}/> {s.name}
+                <a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer" className="btn btn-soft" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none', color: s.color }}>
+                  <BrandIcon brand={s.brand}/> {s.name}
                 </a>
               ))}
               <button
                 className="btn btn-soft"
                 onClick={() => { navigator.clipboard?.writeText(`${shareText} ${shareUrl}`); }}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
               >
-                <Icon name="link" size={14}/> Copy link
+                <BrandIcon brand="link"/> Copy link
               </button>
             </div>
           </div>
