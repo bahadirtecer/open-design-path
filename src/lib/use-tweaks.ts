@@ -13,7 +13,7 @@ export type Tweaks = {
 };
 
 const DEFAULTS: Tweaks = {
-  theme: 'vercel',
+  theme: '',
   aesthetic: '',
   density: 'comfortable',
   bracket: 'horizontal',
