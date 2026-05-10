@@ -17,6 +17,7 @@ const QRScanner = ({ navigate }) => {
   const [code, setCode] = useState('');
   const [scanning, setScanning] = useState(true);
   const [scanned, setScanned] = useState(false);
+  const [memberStatus, setMemberStatus] = useState(null); // null | 'member' | 'guest'
   const D = TL_DATA;
   const orgName = 'Warszawa Tennis Club';
   const orgComps = [
@@ -28,6 +29,7 @@ const QRScanner = ({ navigate }) => {
     setScanning(false);
     setScanned(true);
     setCode('WTC-2026');
+    setMemberStatus(null);
   };
 
   return (
