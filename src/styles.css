@@ -886,19 +886,24 @@ img { display: block; max-width: 100%; }
   --ink-3: #7f8a84;
   --line: #2a332d;
   --line-2: #3a443d;
-  --primary: #5fbf86;
-  --primary-2: #7ed3a0;
+  --primary: #93c101;
+  --primary-2: #a8d420;
   --primary-ink: #0f1512;
   --accent: #e07a4d;
   --accent-2: #ef8e63;
   --warn: #e0b340;
-  --good: #5fbf86;
+  --good: #93c101;
   --bad: #e76a52;
   --chip: #232c27;
   --chip-ink: #ecf2ee;
   --shadow-sm: 0 1px 2px rgba(0,0,0,0.5);
   --shadow-md: 0 6px 18px -8px rgba(0,0,0,0.6), 0 2px 6px rgba(0,0,0,0.35);
   --shadow-lg: 0 24px 48px -16px rgba(0,0,0,0.7), 0 6px 14px rgba(0,0,0,0.4);
+  --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Geist', -apple-system, sans-serif;
+  --font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, monospace;
+  --display-italic: normal;
+  --tracking-display: -0.05em;
 }
 [data-theme="dark"] body,
 body[data-theme="dark"] {
@@ -1160,3 +1165,24 @@ body[data-theme="vercel"] .public-shell > nav { background-color: color-mix(in s
 .set-scores-court .btn-ghost:hover { background: #fafafa !important; color: #000000 !important; }
 .set-scores-court .input { color: #000000 !important; font-weight: 700 !important; }
 
+
+/* ===================================================================
+   DARK THEME — share Vercel typography (Geist) everywhere
+   =================================================================== */
+body[data-theme="dark"] .h0 { font-family: var(--font-sans); font-weight: 700; letter-spacing: -0.05em; font-style: normal; }
+body[data-theme="dark"] .h1 { font-family: var(--font-sans); font-weight: 600; letter-spacing: -0.04em; font-style: normal; }
+body[data-theme="dark"] .h2 { font-family: var(--font-sans); font-weight: 600; letter-spacing: -0.03em; font-style: normal; }
+body[data-theme="dark"] .h3 { letter-spacing: -0.02em; }
+body[data-theme="dark"] .display { font-family: var(--font-sans); font-weight: 700; font-style: normal; letter-spacing: -0.04em; }
+body[data-theme="dark"] .stat-value { font-family: var(--font-sans); font-style: normal; font-weight: 700; letter-spacing: -0.02em; }
+body[data-theme="dark"] .eyebrow { font-family: var(--font-mono); font-weight: 500; }
+body[data-theme="dark"] .btn { font-family: var(--font-sans); font-weight: 500; }
+body[data-theme="dark"] .chip { font-family: var(--font-mono); font-weight: 500; font-size: 11px; letter-spacing: 0; text-transform: none; }
+body[data-theme="dark"] .input,
+body[data-theme="dark"] input,
+body[data-theme="dark"] select,
+body[data-theme="dark"] textarea { font-family: var(--font-sans); }
+body[data-theme="dark"] .mono { font-family: var(--font-mono); }
+body[data-theme="dark"] .tab { font-family: var(--font-sans); font-weight: 500; }
+body[data-theme="dark"] .filter-pill { font-family: var(--font-sans); font-weight: 500; }
+body[data-theme="dark"] .live-badge { font-family: var(--font-mono); font-weight: 700; }
