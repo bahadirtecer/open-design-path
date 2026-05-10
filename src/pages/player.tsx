@@ -705,6 +705,13 @@ const MatchHistory = ({ navigate }) => {
 
 const MyProfile = ({ navigate }) => {
   const me = TL_DATA.PLAYERS[0];
+  // Partner state — null | { stage: 'invited'|'incoming'|'confirmed', player }
+  const [partner, setPartner] = React.useState(() => {
+    try { return JSON.parse(localStorage.getItem('cz_partner') || 'null'); } catch { return null; }
+  });
+  React.useEffect(() => { localStorage.setItem('cz_partner', JSON.stringify(partner)); }, [partner]);
+  const [pickerOpen, setPickerOpen] = React.useState(false);
+  const candidates = TL_DATA.PLAYERS.slice(1, 8);
   return (
     <div className="page page--wide">
       <PageHeader eyebrow="Account" title="My profile." sub="Visible to other players. Edit any field — changes save automatically."/>
@@ -739,9 +746,16 @@ const MyProfile = ({ navigate }) => {
           <Card title="Personal info">
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap: 12 }}>
               <Field label="Display name"><input className="input" defaultValue={me.name}/></Field>
-              <Field label="Email"><input className="input" type="email" defaultValue={`${me.handle}@example.com`}/></Field>
+              <Field label="Email / username"><input className="input" type="email" defaultValue={`${me.handle}@example.com`}/></Field>
               <Field label="Phone"><input className="input" type="tel" defaultValue="+48 600 000 000"/></Field>
               <Field label="City"><input className="input" defaultValue={me.city}/></Field>
+              <Field label="Gender">
+                <select className="select" defaultValue="female">
+                  <option value="female">Female</option>
+                  <option value="male">Male</option>
+                  <option value="other">Prefer not to say</option>
+                </select>
+              </Field>
               <Field label="Date of birth"><input className="input" type="date" defaultValue="1995-04-22"/></Field>
               <Field label="Years playing tennis"><input className="input" type="number" min="0" defaultValue="8"/></Field>
               <Field label="Skill level">
@@ -760,6 +774,58 @@ const MyProfile = ({ navigate }) => {
               <Field span={2} label="Bio"><textarea className="textarea" rows="3" defaultValue="Tournament regular at WTC. Prefer clay; my serve gets nasty after a third coffee."/></Field>
             </div>
           </Card>
+
+          <Card title="Doubles partner" action={partner?.stage === 'confirmed' ? <Chip tone="good" dot>Active</Chip> : partner?.stage === 'invited' ? <Chip tone="warn" dot>Invite sent</Chip> : partner?.stage === 'incoming' ? <Chip tone="primary" dot>Invite received</Chip> : <Chip>None</Chip>}>
+            {!partner && !pickerOpen && (
+              <div className="row between" style={{ gap: 12 }}>
+                <div className="muted" style={{ fontSize: 13 }}>Choose a partner to register together for doubles & mixed competitions. Both sides must accept.</div>
+                <Btn variant="primary" icon="plus" onClick={()=>setPickerOpen(true)}>Invite partner</Btn>
+              </div>
+            )}
+            {!partner && pickerOpen && (
+              <div style={{ display:'grid', gap: 10 }}>
+                <input className="input" placeholder="Search players by name, email or phone…"/>
+                <div style={{ display:'grid', gap: 6, maxHeight: 260, overflow:'auto' }}>
+                  {candidates.map(p => (
+                    <div key={p.id} className="row between" style={{ padding: 10, borderRadius: 10, border:'1px solid var(--line)' }}>
+                      <div className="row" style={{ gap: 10 }}>
+                        <Avatar src={p.avatar} name={p.name} size={32}/>
+                        <div>
+                          <div style={{ fontWeight: 600, fontSize: 13 }}>{p.name}</div>
+                          <div className="muted" style={{ fontSize: 11 }}>{p.city} · Rating {p.rating}</div>
+                        </div>
+                      </div>
+                      <Btn size="sm" variant="primary" iconRight="send" onClick={()=>{ setPartner({ stage:'invited', player: p }); setPickerOpen(false); }}>Send invite</Btn>
+                    </div>
+                  ))}
+                </div>
+                <div className="row" style={{ justifyContent:'flex-end' }}>
+                  <Btn variant="ghost" onClick={()=>setPickerOpen(false)}>Cancel</Btn>
+                </div>
+              </div>
+            )}
+            {partner && (
+              <div className="row between" style={{ gap: 12 }}>
+                <div className="row" style={{ gap: 12 }}>
+                  <Avatar src={partner.player.avatar} name={partner.player.name} size={44}/>
+                  <div>
+                    <div style={{ fontWeight: 700 }}>{partner.player.name}</div>
+                    <div className="muted" style={{ fontSize: 12 }}>
+                      {partner.stage === 'confirmed' && 'Partnership active — you can register together.'}
+                      {partner.stage === 'invited' && 'Waiting for them to accept your invite.'}
+                      {partner.stage === 'incoming' && `${partner.player.name.split(' ')[0]} invited you to be their partner.`}
+                    </div>
+                  </div>
+                </div>
+                <div className="row" style={{ gap: 6 }}>
+                  {partner.stage === 'incoming' && <Btn variant="primary" size="sm" icon="check" onClick={()=>setPartner({ ...partner, stage:'confirmed' })}>Accept</Btn>}
+                  {partner.stage === 'invited' && <Btn variant="soft" size="sm" onClick={()=>setPartner({ ...partner, stage:'confirmed' })}>Simulate accept</Btn>}
+                  <Btn variant="ghost" size="sm" icon="x" onClick={()=>setPartner(null)}>{partner.stage === 'confirmed' ? 'Leave partnership' : 'Cancel'}</Btn>
+                </div>
+              </div>
+            )}
+          </Card>
+
           <Card title="Preferences">
             <div style={{ display:'grid', gap: 10 }}>
               <label className="checkbox"><input type="checkbox" defaultChecked/> Email me when a match is scheduled</label>
