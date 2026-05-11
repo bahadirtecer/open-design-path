@@ -186,7 +186,7 @@ const Landing = ({ navigate }) =>
           <div style={{ marginTop: 10, opacity: 0.85, fontSize: 15 }}>Free for clubs under 50 members. No card required.</div>
         </div>
         <div className="row" style={{ gap: 8 }}>
-          <Btn variant="accent" size="lg" className="bg-green-600" iconRight="arrow_right" onClick={() => navigate('public_signup')}>Create account</Btn>
+          <Btn variant="accent" size="lg" iconRight="arrow_right" onClick={() => navigate('public_signup')}>Create account</Btn>
         </div>
       </div>
     </section>
