@@ -25,10 +25,10 @@ export const Chip = ({ children, tone = '', dot = false }: any) => (
   <span className={`chip ${tone ? 'chip-' + tone : ''} ${dot ? 'chip-dot' : ''}`}>{children}</span>
 );
 
-export const Btn = ({ variant = 'primary', size, block, icon, iconRight, children, onClick, type, disabled, style }: any) => (
+export const Btn = ({ variant = 'primary', size, block, icon, iconRight, children, onClick, type, disabled, style, className = '' }: any) => (
   <button type={type || 'button'} disabled={disabled} onClick={onClick}
     style={style}
-    className={`btn btn-${variant} ${size ? 'btn-' + size : ''} ${block ? 'btn-block' : ''}`}>
+    className={`btn btn-${variant} ${size ? 'btn-' + size : ''} ${block ? 'btn-block' : ''} ${className}`}>
     {icon && <Icon name={icon} size={size === 'sm' ? 13 : 15} />}
     {children}
     {iconRight && <Icon name={iconRight} size={size === 'sm' ? 13 : 15} />}
