@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
-import logo from '@/assets/courtzone-horizontal.png';
+import logo from '@/assets/courtzone-main.png';
 
 export const Route = createFileRoute('/')({
   head: () => ({
@@ -51,7 +51,7 @@ function ComingSoon() {
         fontFamily: 'var(--font-sans, Manrope, system-ui)',
       }}
     >
-      <img src={logo} alt="CourtZone" style={{ height: 48, marginBottom: 40 }} />
+      <img src={logo} alt="CourtZone" style={{ height: 180, marginBottom: 24 }} />
 
       <span
         style={{
