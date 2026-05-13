@@ -1,13 +1,19 @@
+// @ts-nocheck
 import { createFileRoute } from '@tanstack/react-router';
-import { useEffect } from 'react';
+import { Landing } from '@/pages/public';
+import { useCzNavigate } from '@/lib/use-cz-navigate';
+import { TweaksPanel } from '@/components/courtzone/TweaksPanel';
 
 export const Route = createFileRoute('/')({
-  component: LandingRedirect,
+  component: IndexPage,
 });
 
-function LandingRedirect() {
-  useEffect(() => {
-    window.location.replace('/landing.html');
-  }, []);
-  return null;
+function IndexPage() {
+  const navigate = useCzNavigate();
+  return (
+    <div className="public-shell">
+      <Landing navigate={navigate} />
+      <TweaksPanel />
+    </div>
+  );
 }

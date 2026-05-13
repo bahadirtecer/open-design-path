@@ -196,7 +196,7 @@ img { display: block; max-width: 100%; }
   width: 168px; height: 36px;
   display: block;
   background: transparent;
-  background-image: url('./assets/courtzone-horizontal-white.png');
+  background-image: url('./assets/courtzone-horizontal.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: left center;
