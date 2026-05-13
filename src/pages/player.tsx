@@ -677,8 +677,8 @@ const MatchResultEntry = ({ navigate }) => {
             </div>
           </Field>
 
-          <div style={{ background:'color-mix(in srgb, var(--good) 10%, transparent)', borderRadius: 12, padding: '16px 20px', fontSize: 16, fontWeight: 600, color: 'var(--good)', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'nowrap', whiteSpace: 'nowrap' }}>
-            <span style={{ fontSize: 22 }}>🎾</span>
+          <div className="bg-[#142238] my-0 py-[20px] px-0" style={{ borderRadius: 12, fontSize: 16, fontWeight: 600, color: 'var(--good)', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'nowrap', whiteSpace: 'nowrap' }}>
+            <span style={{ fontSize: 22, marginLeft: '20px' }}>🎾</span>
             <span>Nice match! <b>6-4, 3-6, 7-5</b> — 🏆 <b>Iga Górski</b> takes it! 🔥</span>
           </div>
         </div>
