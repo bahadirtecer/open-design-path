@@ -689,7 +689,7 @@ const MatchResultEntry = ({ navigate }) => {
             <div className="muted" style={{ fontSize: 13, marginBottom: 14 }}>{m.p2.name} has been notified. Share your win with the world:</div>
             <div className="row" style={{ gap: 8, flexWrap: 'wrap' }}>
               {shareLinks.map(s => (
-                <a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer" className="btn" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none', color: s.color, background: '#fff', border: '1px solid var(--line)' }}>
+                <a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer" className="btn btn-soft" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none', color: s.color }}>
                   <BrandIcon brand={s.brand}/> {s.name}
                 </a>
               ))}
