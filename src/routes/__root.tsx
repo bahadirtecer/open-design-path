@@ -68,7 +68,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head><HeadContent /></head>
-      <body data-aesthetic="neo" data-density="compact" data-bracket="horizontal" data-role="player">
+      <body data-aesthetic="neo" data-density="compact" data-role="player">
         {children}
         <Scripts />
       </body>
