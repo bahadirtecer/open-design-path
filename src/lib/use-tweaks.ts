@@ -1,27 +1,23 @@
 // @ts-nocheck
-// Tweaks (theme/density/bracket/role) state with localStorage persistence.
-// Shared store so all components stay in sync.
+// Tweaks: only 2 presets — Koyu (neo) and Açık (editorial).
+// Theme = Court (default), Density = Compact, both constant.
+// role/organizing kept as internal app state (not user-facing in tweaks).
 import { useEffect, useSyncExternalStore } from 'react';
 
 export type Tweaks = {
-  theme: string;
-  aesthetic: string;
-  density: string;
-  bracket: string;
+  aesthetic: 'neo' | 'editorial';
+  // Internal app state — not exposed in TweaksPanel UI.
   role: 'player' | 'admin';
   organizing: 'none' | 'active';
 };
 
 const DEFAULTS: Tweaks = {
-  theme: '',
   aesthetic: 'neo',
-  density: 'compact',
-  bracket: 'horizontal',
   role: 'player',
   organizing: 'active',
 };
 
-const KEY = 'cz_tweaks_v3';
+const KEY = 'cz_tweaks_v4';
 
 function load(): Tweaks {
   if (typeof localStorage === 'undefined') return DEFAULTS;
@@ -29,7 +25,7 @@ function load(): Tweaks {
     const raw = localStorage.getItem(KEY);
     if (!raw) return DEFAULTS;
     const parsed = JSON.parse(raw);
-    if (parsed.role === 'organizer') parsed.role = 'player';
+    if (parsed.aesthetic !== 'neo' && parsed.aesthetic !== 'editorial') parsed.aesthetic = 'neo';
     return { ...DEFAULTS, ...parsed };
   } catch { return DEFAULTS; }
 }
@@ -43,10 +39,9 @@ function emit() { listeners.forEach((l) => l()); }
 function applyDom(t: Tweaks) {
   if (typeof document === 'undefined') return;
   const b = document.body;
-  if (t.theme) b.setAttribute('data-theme', t.theme); else b.removeAttribute('data-theme');
-  if (t.aesthetic) b.setAttribute('data-aesthetic', t.aesthetic); else b.removeAttribute('data-aesthetic');
-  b.setAttribute('data-density', t.density);
-  b.setAttribute('data-bracket', t.bracket);
+  b.removeAttribute('data-theme');
+  b.setAttribute('data-aesthetic', t.aesthetic);
+  b.setAttribute('data-density', 'compact');
   b.setAttribute('data-role', t.role);
 }
 
@@ -58,7 +53,7 @@ function subscribe(l: () => void) {
 function getSnapshot() { return state; }
 function getServerSnapshot() { return DEFAULTS; }
 
-function setTweak(k: keyof Tweaks, v: string) {
+function setTweak(k: keyof Tweaks, v: any) {
   state = { ...state, [k]: v };
   try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
   applyDom(state);
